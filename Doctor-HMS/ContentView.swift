@@ -120,7 +120,7 @@ struct ProfileView: View {
                 .padding(.trailing, 10)
 
                 VStack(alignment: .leading) {
-                    Text("Dr. Rishita ")
+                    Text("Dr. S Nirnay ")
                         .fontWeight(.bold)
                         .font(.largeTitle)
                     Text("Department")
@@ -291,7 +291,7 @@ struct AppointmentRow: View {
             Image(systemName: "chevron.right")
         }
         .padding()
-        .shadow(radius: 2)
+        .shadow(radius: 8)
                
     }
 }
