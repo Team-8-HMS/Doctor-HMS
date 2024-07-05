@@ -146,7 +146,7 @@ struct DashboardView: View {
 
             HStack(spacing: 5) {
                 CardView(title: "Total Patients for today", number: 25, imageName: "person.2.fill", backgroundColor: Color(hex: "#DDE2F2"))
-                CardView(title: "Total Appointments", number: 40, imageName: "calendar.badge.clock", backgroundColor: Color(hex: "#DDE2F2"))
+                CardView(title: "Remaining Appointments", number: 16, imageName: "calendar.badge.clock", backgroundColor: Color(hex: "#DDE2F2"))
             }
             .padding()
             .frame(height: 200)
@@ -155,7 +155,7 @@ struct DashboardView: View {
                 .font(.title) // Adjust font size here
                 .fontWeight(.bold)
                 .padding(.top, 30)
-                .frame(maxWidth: .infinity, alignment: .leading) // Set alignment to leading
+                .frame(maxWidth: .infinity, alignment: .leading)
             HeaderRow()
             List {
                 ForEach(patientData) { patient in
@@ -179,16 +179,20 @@ struct ScheduleView: View {
         VStack {
             CalendarView(selectedDate: $selectedDate)
                 .padding(.bottom, 20)
-                .padding(.bottom, 10)
+            
             List {
                 ForEach(appointments.filter { $0.date.isSameDay(as: selectedDate) }) { appointment in
                     AppointmentRow(appointment: appointment)
-
                 }
             }
+            .padding(.horizontal) // Add horizontal padding to the List
+            .padding(.bottom, 10) // Add bottom padding to the List
+           
         }
+        .padding(.horizontal,20)
     }
 }
+
 
 // CalendarView
 
@@ -281,12 +285,15 @@ struct AppointmentRow: View {
                     .font(.headline)
                 Text(appointment.patient.disease)
                     .font(.subheadline)
-                Text(appointment.patient.timing)
-                    .font(.subheadline)
-                Text(appointment.status)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+               
             }
+            Spacer()
+            Text(appointment.patient.timing)
+                .font(.subheadline)
+            Spacer()
+            Text(appointment.status)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
             Spacer()
             Image(systemName: "chevron.right")
         }
@@ -296,13 +303,14 @@ struct AppointmentRow: View {
     }
 }
 
+//header row at dashboard
 struct HeaderRow: View {
     var body: some View {
         HStack {
             Text("Name")
                 .font(.subheadline)
                 .frame(width: 100, alignment: .leading)
-                .padding(.leading, 100)
+                .padding(.leading, 160)
 //            Text("Gender")
 //                .font(.subheadline)
 //                .frame(width: 60, alignment: .leading)
@@ -310,11 +318,11 @@ struct HeaderRow: View {
             Text("Timing")
                 .font(.subheadline)
                 .frame(width: 100, alignment: .leading)
-                .padding(.leading, 180)
+                .padding(.leading, 140)
             Text("Status")
                 .font(.subheadline)
                 .frame(width: 100, alignment: .leading)
-                .padding(.leading, 130)
+                .padding(.leading, 170)
             Spacer()
             Image(systemName: " ")
                 .font(.subheadline)
@@ -400,48 +408,88 @@ struct CardView: View {
     }
 }
 
+// Patient row
 struct PatientRow: View {
     var patient: Patient
 
     var body: some View {
-        HStack {
+        HStack(spacing: 10) {
             Image(patient.profileImage)
                 .resizable()
                 .frame(width: 80, height: 80)
                 .clipShape(Circle())
                 .padding(.trailing, 10)
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 5) {
                 Text(patient.name)
                     .font(.headline)
+                    .lineLimit(1) // Limit name to 1 line
                 Text(patient.disease)
                     .font(.subheadline)
+                    .lineLimit(2) // Limit disease to 2 lines
             }
+            .padding(.leading, 10)
+            
             Spacer()
+            
             Text(patient.timing)
+                .font(.subheadline)
+                .frame(width: 200, alignment: .leading) // Fixed width for timing
+                .padding(.leading, 60)
+                .multilineTextAlignment(.center)
+            
             Spacer()
+            
             Text(patient.status)
+                .foregroundColor(statusColor(for: patient.status))
+                .multilineTextAlignment(.center)
+                .padding(.vertical, 10)
+                .padding(.horizontal,50) // horizontal padding for status
+                .background(statusBackgroundColor(for: patient.status))
+                .cornerRadius(8)
+                .frame(width: 200, alignment: .center) // Fixed width for status background
+            
             Spacer()
-            Menu {
-                Button(action: {
-                   
-                }) {
-                    Label("Upload Record", systemImage: "doc")
-                }
-                Button(action: {
-                   
-                }) {
-                    Label("Did Not Visit", systemImage: "xmark.circle")
-                }
-            } label: {
-                Image(systemName: "ellipsis")
-                    .padding()
-                    .frame(width: 100, height: 70)
-            }
+            
+            Image(systemName: "chevron.right")
+                .padding()
+                .frame(width: 40, height: 40)
+            
+                .padding(.vertical, 30)
+                .padding(.horizontal, 20)
         }
-        .padding(.vertical, 10)
+    }
+
+    private func statusColor(for status: String) -> Color {
+        switch status {
+        case "Pending":
+            return .black
+        case "Done":
+            return .black
+        case "In progress":
+            return .black
+        default:
+            return .gray // default color if status is unrecognized
+        }
+    }
+
+    private func statusBackgroundColor(for status: String) -> Color {
+        switch status {
+        case "Pending":
+            return Color(red: 255/255, green: 120/255, blue: 120/255)
+        case "Done":
+            return Color(red: 86/255, green: 196/255, blue: 154/255)
+        case "In progress":
+            return Color(red: 140/255, green: 180/255, blue: 255/255)
+        default:
+            return Color.gray.opacity(0.2)
+        }
     }
 }
+
+
+
+
 
 // Data Models
 
@@ -463,19 +511,24 @@ struct Appointment: Identifiable {
 
 // Sample data
 let patientData = [
-    Patient(name: "John Doe", disease: "Fever", timing: "9:00-10:00 am", status: "In progress", profileImage: "Image"),
-    Patient(name: "Jane Smith", disease: "Back Pain", timing: "10:00-11:00 am", status: "In progress", profileImage: "Image 1"),
+    Patient(name: "John Doe", disease: "Fever", timing: "9:00-10:00 am", status: "Done", profileImage: "Image"),
+    Patient(name: "Jane Smith", disease: "Back Pain", timing: "10:00-11:00 am", status: "Done", profileImage: "Image 1"),
     Patient(name: "Alice Brown", disease: "Headache", timing: "11:00-12:00 pm", status: "In progress", profileImage: "Image 2"),
-    Patient(name: "Robert Green", disease: "Fracture", timing: "2:00-3:00 pm", status: "In progress", profileImage: "Image"),
+    Patient(name: "Robert Green", disease: "Fracture", timing: "2:00-3:00 pm", status: "Pending", profileImage: "Image"),
     Patient(name: "Emily White", disease: "Allergy", timing: "3:00-4:00 pm", status: "In progress", profileImage: "Image"),
 ]
+let dateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    return formatter
+}()
+let appointments: [Appointment] = [
+    Appointment(status: "Pending", date: Date(), patient: patientData[0]),
+    Appointment(status: "Pending", date: Date(), patient: patientData[1]),
+    Appointment(status: "Pending", date: Date(), patient: patientData[2]),
+    Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-04 15:45:00")!, patient: patientData[3]),
+        Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-07 17:00:00")!, patient: patientData[4])
 
-let appointments = [
-    Appointment(status: "Pending", date: Date().addingTimeInterval(60 * 60 * 24 * 2), patient: patientData[0]),
-    Appointment(status: "Pending", date: Date().addingTimeInterval(60 * 60 * 24 * 4), patient: patientData[1]),
-    Appointment(status: "Pending", date: Date().addingTimeInterval(60 * 60 * 24 * 6), patient: patientData[2]),
-    Appointment(status: "Pending", date: Date().addingTimeInterval(60 * 60 * 24 * 6), patient: patientData[3]),
-    Appointment(status: "Pending", date: Date().addingTimeInterval(60 * 60 * 24 * 6), patient: patientData[4]),
 ]
 
 //Preview
