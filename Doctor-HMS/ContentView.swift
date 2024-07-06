@@ -1,7 +1,6 @@
 import SwiftUI
 
-//Color Extension for Hex Conversion
-
+// Color Extension for Hex Conversion
 extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
@@ -29,8 +28,6 @@ extension Color {
 }
 
 // ContentView
-
-
 struct ContentView: View {
     @State private var selectedItem: String? = "Dashboard"
     let items = ["Dashboard", "Schedule", "Video call", "Requests"]
@@ -75,18 +72,14 @@ struct ContentView: View {
 }
 
 // DetailView
-
 struct DetailView: View {
     var item: String
     @State private var selectedDate = Date()
 
     var body: some View {
         VStack {
-                   ProfileView()
-                       .padding(.top, -50)
-                       .padding(.trailing, 30)
-                       .padding(.bottom, 40)
-                       .frame(maxWidth: .infinity, alignment: .topTrailing)
+            TopFrameView()
+        
             if item == "Dashboard" {
                 DashboardView()
             } else if item == "Schedule" {
@@ -102,12 +95,37 @@ struct DetailView: View {
     }
 }
 
-// Doctor Profile
+//proile's frame
+struct TopFrameView: View {
+    var body: some View {
+        VStack(spacing: 0) {
+            ZStack {
+                Color.white
+                
+                HStack {
+                    Spacer()
+                    ProfileView()
+                }
+                .padding(.horizontal)
+            }
+            .frame(maxWidth: .infinity, maxHeight: 130) // Adjust height as needed
+            .background(Color.white)
+            .overlay(
+                Rectangle()
+                    .frame(height: 2) // Adjust border thickness
+                    .foregroundColor(.gray),
+                alignment: .bottom
+            )
+        }
+        .edgesIgnoringSafeArea(.top)
+    }
+}
 
+
+// Doctor Profile
 struct ProfileView: View {
     var body: some View {
         VStack {
-            
             HStack {
                 ZStack {
                     Image("DrProfile")
@@ -133,7 +151,7 @@ struct ProfileView: View {
 }
 
 // DashboardView
-
+// DashboardView
 struct DashboardView: View {
     var body: some View {
         VStack(alignment: .leading) {
@@ -158,20 +176,19 @@ struct DashboardView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             HeaderRow()
             List {
-                ForEach(patientData) { patient in
-                    PatientRow(patient: patient)
+                // Filter appointments for today's date
+                ForEach(appointments.filter { $0.date.isSameDay(as: Date()) }) { appointment in
+                    PatientRow(patient: appointment.patient)
                 }
             }
             .listStyle(PlainListStyle())
             .padding(.horizontal)
-            
         }
         .padding(.horizontal)
     }
 }
 
 // ScheduleView
-
 struct ScheduleView: View {
     @State private var selectedDate = Date()
 
@@ -187,15 +204,12 @@ struct ScheduleView: View {
             }
             .padding(.horizontal) // Add horizontal padding to the List
             .padding(.bottom, 10) // Add bottom padding to the List
-           
         }
-        .padding(.horizontal,20)
+        .padding(.horizontal, -10)
     }
 }
 
-
 // CalendarView
-
 struct CalendarView: View {
     @Binding var selectedDate: Date
     @State private var weekOffset: Int = 0
@@ -210,9 +224,9 @@ struct CalendarView: View {
     var body: some View {
         VStack {
             Text(selectedDate.formattedMonthAndYear())
-                .font(.title)
+                .font(.system(size: 40))
                 .fontWeight(.bold)
-                .padding(.top, 0)
+                .padding(.top, -40)
             
             HStack {
                 Button(action: {
@@ -229,7 +243,7 @@ struct CalendarView: View {
                     VStack {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
-                                .foregroundColor(selectedDate.isSameDay(as: day) ? Color(UIColor(red: 225 / 255, green: 101 / 255, blue: 74 / 255, alpha: 1)) : Color.gray)
+                                .foregroundColor(selectedDate.isSameDay(as: day) ? Color(UIColor(red: 228 / 255, green: 101 / 255, blue: 74 / 255, alpha: 1)) : Color.gray)
                                 .frame(width: 120, height: 100)
                             
                             VStack {
@@ -310,7 +324,7 @@ struct HeaderRow: View {
             Text("Name")
                 .font(.subheadline)
                 .frame(width: 100, alignment: .leading)
-                .padding(.leading, 160)
+                .padding(.leading, 150)
 //            Text("Gender")
 //                .font(.subheadline)
 //                .frame(width: 60, alignment: .leading)
@@ -318,21 +332,21 @@ struct HeaderRow: View {
             Text("Timing")
                 .font(.subheadline)
                 .frame(width: 100, alignment: .leading)
-                .padding(.leading, 140)
+                .padding(.leading, 110)
             Text("Status")
                 .font(.subheadline)
                 .frame(width: 100, alignment: .leading)
-                .padding(.leading, 170)
+                .padding(.leading, 190)
             Spacer()
             Image(systemName: " ")
                 .font(.subheadline)
                 .frame(width: 50, alignment: .leading)
                 .padding()
         }
-        .padding(.vertical, 10)
+        .padding(.vertical, 15)
         .padding(.horizontal)
         .background(Color(UIColor.systemGray5))
-        .cornerRadius(15)
+        .cornerRadius(10)
     }
 }
 // Components
@@ -341,10 +355,14 @@ struct GreetingView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             Text("Good morning, Dr. Nishar")
-                .font(.largeTitle)
+                //.font(.largeTitle)
+                .font(.system(size: 40, weight: .bold))
                 .fontWeight(.bold)
+                .padding(.top, -50)
             Text("Here are your important tasks for today:")
-                .font(.title2)
+                .font(.system(size: 25))
+                .foregroundColor(.gray)
+                
         }
         .padding(.vertical, 0)
         .padding(.horizontal, 10)
@@ -441,6 +459,7 @@ struct PatientRow: View {
             Spacer()
             
             Text(patient.status)
+                .fontWeight(.bold)
                 .foregroundColor(statusColor(for: patient.status))
                 .multilineTextAlignment(.center)
                 .padding(.vertical, 10)
@@ -463,11 +482,11 @@ struct PatientRow: View {
     private func statusColor(for status: String) -> Color {
         switch status {
         case "Pending":
-            return .black
+            return Color(red: 218/255, green: 59/255, blue: 19/255)
         case "Done":
-            return .black
-        case "In progress":
-            return .black
+            return Color(red: 101/255, green:200/255, blue: 102/255)
+        case "Progress":
+            return Color(red: 50/255, green: 0/255, blue: 255/255)
         default:
             return .gray // default color if status is unrecognized
         }
@@ -476,11 +495,11 @@ struct PatientRow: View {
     private func statusBackgroundColor(for status: String) -> Color {
         switch status {
         case "Pending":
-            return Color(red: 255/255, green: 120/255, blue: 120/255)
+            return Color(red: 250/255, green: 224/255, blue: 229/255)
         case "Done":
-            return Color(red: 86/255, green: 196/255, blue: 154/255)
-        case "In progress":
-            return Color(red: 140/255, green: 180/255, blue: 255/255)
+            return Color(red: 230/255, green: 246/255, blue: 231/255)
+        case "Progress":
+            return Color(red: 230/255, green: 230/255, blue: 247/255)
         default:
             return Color.gray.opacity(0.2)
         }
@@ -513,9 +532,9 @@ struct Appointment: Identifiable {
 let patientData = [
     Patient(name: "John Doe", disease: "Fever", timing: "9:00-10:00 am", status: "Done", profileImage: "Image"),
     Patient(name: "Jane Smith", disease: "Back Pain", timing: "10:00-11:00 am", status: "Done", profileImage: "Image 1"),
-    Patient(name: "Alice Brown", disease: "Headache", timing: "11:00-12:00 pm", status: "In progress", profileImage: "Image 2"),
+    Patient(name: "Alice Brown", disease: "Headache", timing: "11:00-12:00 pm", status: "Progress", profileImage: "Image 2"),
     Patient(name: "Robert Green", disease: "Fracture", timing: "2:00-3:00 pm", status: "Pending", profileImage: "Image"),
-    Patient(name: "Emily White", disease: "Allergy", timing: "3:00-4:00 pm", status: "In progress", profileImage: "Image"),
+    Patient(name: "Emily White", disease: "Allergy", timing: "3:00-4:00 pm", status: "Progress", profileImage: "Image"),
 ]
 let dateFormatter: DateFormatter = {
     let formatter = DateFormatter()
@@ -526,8 +545,11 @@ let appointments: [Appointment] = [
     Appointment(status: "Pending", date: Date(), patient: patientData[0]),
     Appointment(status: "Pending", date: Date(), patient: patientData[1]),
     Appointment(status: "Pending", date: Date(), patient: patientData[2]),
+    Appointment(status: "Pending", date: Date(), patient: patientData[3]),
+    Appointment(status: "Pending", date: Date(), patient: patientData[3]),
     Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-04 15:45:00")!, patient: patientData[3]),
-        Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-07 17:00:00")!, patient: patientData[4])
+    Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-07 17:00:00")!, patient: patientData[4]), Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-05 15:45:00")!, patient: patientData[3]),
+    Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-05 17:00:00")!, patient: patientData[4])
 
 ]
 
