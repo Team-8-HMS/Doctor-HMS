@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B0B86CC12C3900E400711665 /* Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B86CC02C3900E400711665 /* Schedule.swift */; };
+		B0B86CC32C3901A800711665 /* PatientList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B86CC22C3901A800711665 /* PatientList.swift */; };
+		B0B86CC52C39022400711665 /* Dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B86CC42C39022400711665 /* Dashboard.swift */; };
 		E676C6722C365D3F000CAE39 /* Doctor_HMSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E676C6712C365D3F000CAE39 /* Doctor_HMSApp.swift */; };
 		E676C6742C365D3F000CAE39 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E676C6732C365D3F000CAE39 /* ContentView.swift */; };
 		E676C6762C365D42000CAE39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E676C6752C365D42000CAE39 /* Assets.xcassets */; };
@@ -15,6 +18,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B0B86CC02C3900E400711665 /* Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schedule.swift; sourceTree = "<group>"; };
+		B0B86CC22C3901A800711665 /* PatientList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientList.swift; sourceTree = "<group>"; };
+		B0B86CC42C39022400711665 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
 		E676C66E2C365D3F000CAE39 /* Doctor-HMS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Doctor-HMS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E676C6712C365D3F000CAE39 /* Doctor_HMSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Doctor_HMSApp.swift; sourceTree = "<group>"; };
 		E676C6732C365D3F000CAE39 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -55,7 +61,10 @@
 			children = (
 				E676C6712C365D3F000CAE39 /* Doctor_HMSApp.swift */,
 				E676C67F2C365DD8000CAE39 /* HomeView.swift */,
+				B0B86CC22C3901A800711665 /* PatientList.swift */,
 				E676C6732C365D3F000CAE39 /* ContentView.swift */,
+				B0B86CC42C39022400711665 /* Dashboard.swift */,
+				B0B86CC02C3900E400711665 /* Schedule.swift */,
 				E676C6752C365D42000CAE39 /* Assets.xcassets */,
 				E676C6772C365D42000CAE39 /* Preview Content */,
 			);
@@ -141,7 +150,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E676C6802C365DD8000CAE39 /* HomeView.swift in Sources */,
+				B0B86CC32C3901A800711665 /* PatientList.swift in Sources */,
 				E676C6742C365D3F000CAE39 /* ContentView.swift in Sources */,
+				B0B86CC12C3900E400711665 /* Schedule.swift in Sources */,
+				B0B86CC52C39022400711665 /* Dashboard.swift in Sources */,
 				E676C6722C365D3F000CAE39 /* Doctor_HMSApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
