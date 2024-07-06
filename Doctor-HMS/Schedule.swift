@@ -126,18 +126,48 @@ struct AppointmentRow: View {
                 .font(.subheadline)
             Spacer()
             Text(appointment.status)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundColor(statusColor(for: appointment.patient.status))
+                .multilineTextAlignment(.center)
+                .padding(.vertical, 10)
+                .padding(.horizontal,50) // horizontal padding for status
+                .background(statusBackgroundColor(for: appointment.patient.status))
+                .cornerRadius(8)
+                .frame(width: 200, alignment: .center)
             Spacer()
             Image(systemName: "chevron.right")
         }
         .padding()
-        .shadow(radius: 8)
+        
                
+    }
+    private func statusColor(for status: String) -> Color {
+        switch status {
+        case "Pending":
+            return Color(red: 218/255, green: 59/255, blue: 19/255)
+        case "Done":
+            return Color(red: 101/255, green:200/255, blue: 102/255)
+        case "Progress":
+            return Color(red: 50/255, green: 0/255, blue: 255/255)
+        default:
+            return .gray // default color if status is unrecognized
+        }
+    }
+
+    private func statusBackgroundColor(for status: String) -> Color {
+        switch status {
+        case "Pending":
+            return Color(red: 250/255, green: 224/255, blue: 229/255)
+        case "Done":
+            return Color(red: 230/255, green: 246/255, blue: 231/255)
+        case "Progress":
+            return Color(red: 230/255, green: 230/255, blue: 247/255)
+        default:
+            return Color.gray.opacity(0.2)
+        }
     }
 }
 
-//
+
 //struct Schedule_Previews: PreviewProvider {
 //    static var previews: some View {
 //        ScheduleView()

@@ -34,9 +34,9 @@ let patientData = [
 ]
 
 let appointments: [Appointment] = [
-    Appointment(status: "Pending", date: Date(), patient: patientData[0]),
-    Appointment(status: "Pending", date: Date(), patient: patientData[1]),
-    Appointment(status: "Pending", date: Date(), patient: patientData[2]),
+    Appointment(status: "Done", date: Date(), patient: patientData[0]),
+    Appointment(status: "Done", date: Date(), patient: patientData[1]),
+    Appointment(status: "Progress", date: Date(), patient: patientData[2]),
     Appointment(status: "Pending", date: Date(), patient: patientData[3]),
     Appointment(status: "Pending", date: Date(), patient: patientData[3]),
     Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-04 15:45:00")!, patient: patientData[3]),

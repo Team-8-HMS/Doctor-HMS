@@ -10,6 +10,14 @@ import SwiftUI
 
 // DashboardView
 struct DashboardView: View {
+    var todayAppointments: [Appointment] {
+        appointments.filter { $0.date.isSameDay(as: Date()) }
+    }
+    
+    var pendingAppointments: [Appointment] {
+        todayAppointments.filter { $0.status == "Pending" }
+    }
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -20,8 +28,8 @@ struct DashboardView: View {
             .padding(.bottom, 20)
 
             HStack(spacing: 5) {
-                CardView(title: "Total Patients for today", number: 25, imageName: "person.2.fill", backgroundColor: Color(hex: "#DDE2F2"))
-                CardView(title: "Remaining Appointments", number: 16, imageName: "calendar.badge.clock", backgroundColor: Color(hex: "#DDE2F2"))
+                CardView(title: "Total Patients for today", number: todayAppointments.count, imageName: "person.2.fill", backgroundColor: Color(hex: "#DDE2F2"))
+                CardView(title: "Remaining Appointments", number: pendingAppointments.count, imageName: "calendar.badge.clock", backgroundColor: Color(hex: "#DDE2F2"))
             }
             .padding()
             .frame(height: 200)
@@ -34,7 +42,7 @@ struct DashboardView: View {
             HeaderRow()
             List {
                 // Filter appointments for today's date
-                ForEach(appointments.filter { $0.date.isSameDay(as: Date()) }) { appointment in
+                ForEach(todayAppointments) { appointment in
                     PatientRow(patient: appointment.patient)
                 }
             }
@@ -44,6 +52,7 @@ struct DashboardView: View {
         .padding(.horizontal)
     }
 }
+
 
 
 
