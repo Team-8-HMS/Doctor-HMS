@@ -30,7 +30,7 @@ let patientData = [
     Patient(name: "Jane Smith", disease: "Back Pain", timing: "10:00-11:00 am", status: "Done", profileImage: "Image 1"),
     Patient(name: "Alice Brown", disease: "Headache", timing: "11:00-12:00 pm", status: "Progress", profileImage: "Image 2"),
     Patient(name: "Robert Green", disease: "Fracture", timing: "2:00-3:00 pm", status: "Pending", profileImage: "Image"),
-    Patient(name: "Emily White", disease: "Allergy", timing: "3:00-4:00 pm", status: "Progress", profileImage: "Image"),
+    Patient(name: "Emily White", disease: "Allergy", timing: "3:00-4:00 pm", status: "Pending", profileImage: "Image"),
 ]
 
 let appointments: [Appointment] = [
