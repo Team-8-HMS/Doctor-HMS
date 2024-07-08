@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct LogInView: View {
     
@@ -87,12 +88,11 @@ struct LogInView: View {
                                     .padding(.bottom,20)
                             }
                             
-    //                         Login button
-                            
-                           
+                            NavigationLink(destination: DashboardView(),isActive: $loginButtonTapped) {
+                                EmptyView()
+                            }
                                                     Button(action: {
-                                                        // Handle login action
-    //                                                    login()
+                                                       login()
                                                     }) {
                                                         Text("Login")
                                                             .foregroundColor(.white)
@@ -102,9 +102,6 @@ struct LogInView: View {
                                                             .cornerRadius(30)
                                                             .padding(.horizontal, 20)
                                                     }
-                            NavigationLink(destination: DashboardView(),isActive: $loginButtonTapped) {
-                                EmptyView()
-                            }
                                                     Spacer()
 
                                                 }
@@ -115,29 +112,25 @@ struct LogInView: View {
                                         .navigationBarTitle("")
                         }
                         .navigationBarTitle("")
+                        
                     }
-    //    func login(){
-    //        print("Func")
-    //        Auth.auth().signIn(withEmail: email, password: password) { firebaseResult, error in
-    //            if let error = error{
-    //                print("Error")
-    //            }
-    //            else{
-    //                print("Else")
-    //                loginButtonTapped = true
-    //
-    //            }
-    //        }
-    //    }
-                    
+        func login(){
+            
+            Auth.auth().signIn(withEmail: email, password: password) { firebaseResult, error in
+                if error != nil{
+                    print("Error")
+                }
+                else{
+                    if password == "HMS@123"{
+                        isForgetPasswordTapped = true
+                    }
+                    else{
+                        loginButtonTapped = true
+                    }
+                }
+            }
+        }
     }
-
-    //   struct LoginView_Previews: PreviewProvider {
-    //       static var previews: some View {
-    //           ContentView()
-    //       }
-    //   }
-   
 #Preview {
     LogInView()
 }

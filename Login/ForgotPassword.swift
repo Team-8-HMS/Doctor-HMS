@@ -5,7 +5,8 @@
 //  Created by Rishita kumari on 08/07/24.
 //
 import SwiftUI
-//import FirebaseAuth
+import FirebaseAuth
+
 
 struct ForgotPasswordView: View {
     @State private var email: String = ""
@@ -42,7 +43,7 @@ struct ForgotPasswordView: View {
                             .padding(.bottom, 10)
                         
                         // Email TextField
-                        TextField("Email", text: $email)
+                        TextField("Enter Your Registered Email", text: $email)
                             .padding()
                             .background(Color.white.opacity(0.8))
                             .cornerRadius(10)
@@ -58,17 +59,16 @@ struct ForgotPasswordView: View {
                                 )
                             
                         
-                        // Reset Password button
-//                        Button(action: sendMail) {
-//                            Text("Reset Your Password")
-//                                .foregroundColor(.white)
-//                                .padding()
-//                                .frame(width: 300)
-//                                .background(Color.blue)
-//                                .cornerRadius(10)
-//                                .padding(.horizontal, 20)
-//                    
-//                        }
+                        Button(action: sendMail) {
+                            Text("Reset Your Password")
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(width: 300)
+                                .background(Color.blue)
+                                .cornerRadius(10)
+                                .padding(.horizontal, 20)
+                    
+                        }
                         .padding(.top, 20)
                         
                         Spacer()
@@ -91,20 +91,20 @@ struct ForgotPasswordView: View {
         }
     }
 
-//    func sendMail() {
-//        Auth.auth().sendPasswordReset(withEmail: email) { error in
-//            if let error = error {
-//                alertTitle = "Error"
-//                alertMessage = error.localizedDescription
-//                isMailSent = false
-//            } else {
-//                alertTitle = "Mail Sent"
-//                alertMessage = "A password reset email has been sent to \(email)."
-//                isMailSent = true
-//            }
-//            showAlert = true
-//        }
-//    }
+    func sendMail() {
+        Auth.auth().sendPasswordReset(withEmail: email) { error in
+            if let error = error {
+                alertTitle = "Error"
+                alertMessage = error.localizedDescription
+                isMailSent = false
+            } else {
+                alertTitle = "Mail Sent"
+                alertMessage = "A password reset email has been sent to \(email)."
+                isMailSent = true
+            }
+            showAlert = true
+        }
+    }
 }
 
 struct ForgotPasswordView_Previews: PreviewProvider {
