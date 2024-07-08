@@ -18,9 +18,9 @@ struct LogInView: View {
             NavigationStack{
                 ZStack {
                     // Background image
-                    Image("loginbac")
+                    Image("LoginUI")
                         .resizable()
-                        .scaledToFit()
+                        .scaledToFill()
                         .edgesIgnoringSafeArea(.all)
                     ZStack {
                         Image("card")
@@ -31,8 +31,16 @@ struct LogInView: View {
                         
                         // Foreground content
                         VStack {
+                            Text("Welcome!")
+                               // .font(.largeTitle.bold())
+                                .font(.system(size: 50, weight: .bold))
+                                .foregroundColor(Color(red: 255/255, green: 101/255, blue: 74/255)) // Replace with your RGB values
+
+                                .padding(.init(top: 550, leading: 0, bottom: -100, trailing: 450))
+
+                           
                             Spacer()
-                            
+                                
                             // Email TextField
                             TextField("Email", text: $email)
                                 .padding()
@@ -43,6 +51,10 @@ struct LogInView: View {
                                 .keyboardType(.emailAddress)
                                 .disableAutocorrection(true)
                                 .foregroundColor(.black).frame(width: 500) // Explicitly set text color
+                                .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.black, lineWidth: 1)
+                                    )
                             
                             // Password SecureField
                             SecureField("Password", text: $password)
@@ -52,6 +64,11 @@ struct LogInView: View {
                                 .padding(.horizontal, 20)
                                 .disableAutocorrection(true)
                                 .foregroundColor(.black).frame(width: 500) // Explicitly set text color
+                                
+                                .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.black, lineWidth: 1)
+                                    )
                             
                             NavigationLink(destination: ForgotPasswordView(), isActive: $isForgetPasswordTapped)
                             {
@@ -67,6 +84,7 @@ struct LogInView: View {
                                 Text("Forgot Password?")
                                     .foregroundColor(.blue)
                                     .padding(.top, 40)
+                                    .padding(.bottom,20)
                             }
                             
     //                         Login button
@@ -79,9 +97,9 @@ struct LogInView: View {
                                                         Text("Login")
                                                             .foregroundColor(.white)
                                                             .padding()
-                                                            .frame(width: 300)
-                                                            .background(Color.blue)
-                                                            .cornerRadius(10)
+                                                            .frame(width: 250)
+                                                            .background(Color(red: 230/255, green: 110/255, blue: 82/255))
+                                                            .cornerRadius(30)
                                                             .padding(.horizontal, 20)
                                                     }
                             NavigationLink(destination: DashboardView(),isActive: $loginButtonTapped) {

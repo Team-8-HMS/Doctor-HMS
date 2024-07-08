@@ -19,9 +19,9 @@ struct ForgotPasswordView: View {
         NavigationStack {
             ZStack {
                 // Background image
-                Image("loginbac")
+                Image("LoginUI")
                     .resizable()
-                    .scaledToFit()
+                    .scaledToFill()
                     .edgesIgnoringSafeArea(.all)
                 
                 ZStack {
@@ -52,6 +52,11 @@ struct ForgotPasswordView: View {
                             .disableAutocorrection(true)
                             .foregroundColor(.black)
                             .frame(width: 500)
+                            .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.black, lineWidth: 1)
+                                )
+                            
                         
                         // Reset Password button
 //                        Button(action: sendMail) {
