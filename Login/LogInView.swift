@@ -16,10 +16,11 @@ struct LogInView: View {
         @State var loginButtonTapped = false
         
         var body: some View {
+            
             NavigationStack{
                 ZStack {
                     // Background image
-                    Image("LoginUI")
+                    Image("LogUI")
                         .resizable()
                         .scaledToFill()
                         .edgesIgnoringSafeArea(.all)
@@ -32,6 +33,7 @@ struct LogInView: View {
                         
                         // Foreground content
                         VStack {
+                        
                             Text("Welcome!")
                                // .font(.largeTitle.bold())
                                 .font(.system(size: 50, weight: .bold))
@@ -43,11 +45,12 @@ struct LogInView: View {
                             Spacer()
                                 
                             // Email TextField
+                        
                             TextField("Email", text: $email)
                                 .padding()
                                 .background(Color.white.opacity(0.8))
                                 .cornerRadius(10)
-                                .padding(.horizontal, 20)
+                                .padding(.horizontal, 10)
                                 .autocapitalization(.none)
                                 .keyboardType(.emailAddress)
                                 .disableAutocorrection(true)
@@ -70,6 +73,7 @@ struct LogInView: View {
                                         RoundedRectangle(cornerRadius: 10)
                                             .stroke(Color.black, lineWidth: 1)
                                     )
+                                .padding(.top)
                             
                             NavigationLink(destination: ForgotPasswordView(), isActive: $isForgetPasswordTapped)
                             {
@@ -110,7 +114,10 @@ struct LogInView: View {
                             
                                         }
                                         .navigationBarTitle("")
+                                        .background(Color(red: 215/255, green: 150/255, blue: 125/255))
+                
                         }
+            .padding(.bottom)
                         .navigationBarTitle("")
                         
                     }

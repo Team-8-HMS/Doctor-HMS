@@ -20,7 +20,7 @@ struct ForgotPasswordView: View {
         NavigationStack {
             ZStack {
                 // Background image
-                Image("LoginUI")
+                Image("LogUI")
                     .resizable()
                     .scaledToFill()
                     .edgesIgnoringSafeArea(.all)
@@ -40,7 +40,7 @@ struct ForgotPasswordView: View {
                         Text("Forgot your password?")
                             .font(.largeTitle)
                             .foregroundColor(.black)
-                            .padding(.bottom, 10)
+                            .padding(.top,150)
                         
                         // Email TextField
                         TextField("Enter Your Registered Email", text: $email)
