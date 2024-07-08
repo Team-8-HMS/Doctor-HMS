@@ -11,7 +11,7 @@ import SwiftUI
 struct Doctor_HMSApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LogInView()
         }
     }
 }
