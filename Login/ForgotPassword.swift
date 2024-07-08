@@ -19,7 +19,7 @@ struct ForgotPasswordView: View {
         NavigationStack {
             ZStack {
                 // Background image
-                Image("LoginUI")
+                Image("LogUI")
                     .resizable()
                     .scaledToFill()
                     .edgesIgnoringSafeArea(.all)
