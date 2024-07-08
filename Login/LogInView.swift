@@ -38,7 +38,7 @@ struct LogInView: View {
                                 .font(.system(size: 50, weight: .bold))
                                 .foregroundColor(Color(red: 255/255, green: 101/255, blue: 74/255)) // Replace with your RGB values
 
-                                .padding(.init(top: 650, leading: 0, bottom: -100, trailing: 450))
+                                .padding(.init(top: 550, leading: 0, bottom: -100, trailing: 450))
 
                            
                             Spacer()
@@ -120,6 +120,7 @@ struct LogInView: View {
                                         .background(Color(red: 215/255, green: 150/255, blue: 125/255))
                 
                         }
+            .padding(.bottom)
                         .navigationBarTitle("")
                         
             
