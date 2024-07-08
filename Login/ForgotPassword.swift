@@ -39,7 +39,7 @@ struct ForgotPasswordView: View {
                         Text("Forgot your password?")
                             .font(.largeTitle)
                             .foregroundColor(.black)
-                            .padding(.bottom, 10)
+                            .padding(.top,150)
                         
                         // Email TextField
                         TextField("Email", text: $email)
