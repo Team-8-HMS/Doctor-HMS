@@ -25,13 +25,7 @@ struct ForgotPasswordView: View {
                     .scaledToFill()
                     .edgesIgnoringSafeArea(.all)
                 
-                ZStack {
-                    Image("card")
-                        .resizable()
-                        .scaledToFit()
-                        .cornerRadius(20)
-                        .shadow(radius: 10)
-                        .frame(width: 600, height: 600)
+               
                     
                     VStack {
                         Spacer()
@@ -65,8 +59,7 @@ struct ForgotPasswordView: View {
                                 .padding()
                                 .frame(width: 250)
                                 .background(Color(red: 230/255, green: 110/255, blue: 82/255))
-                                .cornerRadius(30)
-                                .cornerRadius(10)
+                                .cornerRadius(20)
                                 .padding(.horizontal, 20)
                     
                         }
@@ -74,7 +67,7 @@ struct ForgotPasswordView: View {
                         
                         Spacer()
                     }
-                }
+                
             }
             .navigationBarTitle("")
         }
