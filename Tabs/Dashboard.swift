@@ -73,11 +73,11 @@ struct HeaderRow: View {
             Text("Timing")
                 .font(.subheadline)
                 .frame(width: 100, alignment: .leading)
-                .padding(.leading, 110)
+                .padding(.leading, 150)
             Text("Status")
                 .font(.subheadline)
                 .frame(width: 100, alignment: .leading)
-                .padding(.leading, 190)
+                .padding(.leading, 250)
             Spacer()
             Image(systemName: " ")
                 .font(.subheadline)
@@ -260,3 +260,6 @@ struct PatientRow: View {
 //        DashboardView()
 //    }
 //}
+#Preview {
+    DashboardView()
+}

@@ -171,9 +171,7 @@
 //    }
 //
 //    }
-//#Preview {
-//    LogInView()
-//}
+
 
 import SwiftUI
 import FirebaseAuth
@@ -354,3 +352,6 @@ func isValidEmail(_ email: String) -> Bool {
     return emailPred.evaluate(with: email)
 }
 
+#Preview {
+    LogInView()
+}
