@@ -19,7 +19,7 @@ struct LogInView: View {
             NavigationStack{
                 ZStack {
                     // Background image
-                    Image("LogUI")
+                    Image("Log")
                         .resizable()
                         .scaledToFill()
                         .edgesIgnoringSafeArea(.all)
@@ -33,18 +33,19 @@ struct LogInView: View {
                         // Foreground content
                         VStack {
                         
+                           
+
+                           
+                            
+                                
                             Text("Welcome!")
                                // .font(.largeTitle.bold())
                                 .font(.system(size: 50, weight: .bold))
                                 .foregroundColor(Color(red: 255/255, green: 101/255, blue: 74/255)) // Replace with your RGB values
 
-                                .padding(.init(top: 550, leading: 0, bottom: -100, trailing: 450))
-
-                           
-                            Spacer()
-                                
-                            // Email TextField
-                        
+                                .padding(.top,600)
+                                .padding(.trailing,300)
+                            
                             TextField("Email", text: $email)
                                 .padding()
                                 .background(Color.white.opacity(0.8))
@@ -106,6 +107,7 @@ struct LogInView: View {
                                                             .cornerRadius(30)
                                                             .padding(.horizontal, 20)
                                                     }
+                                                 
                             NavigationLink(destination: DashboardView(),isActive: $loginButtonTapped) {
                                 EmptyView()
                             }
