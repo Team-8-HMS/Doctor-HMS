@@ -20,7 +20,7 @@ struct ForgotPasswordView: View {
         NavigationStack {
             ZStack {
                 // Background image
-                Image("LogUI")
+                Image("LoginUI")
                     .resizable()
                     .scaledToFill()
                     .edgesIgnoringSafeArea(.all)
@@ -63,8 +63,9 @@ struct ForgotPasswordView: View {
                             Text("Reset Your Password")
                                 .foregroundColor(.white)
                                 .padding()
-                                .frame(width: 300)
-                                .background(Color.blue)
+                                .frame(width: 250)
+                                .background(Color(red: 230/255, green: 110/255, blue: 82/255))
+                                .cornerRadius(30)
                                 .cornerRadius(10)
                                 .padding(.horizontal, 20)
                     

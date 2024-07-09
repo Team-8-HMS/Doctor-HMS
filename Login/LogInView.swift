@@ -20,19 +20,13 @@ struct LogInView: View {
             NavigationStack{
                 ZStack {
                     // Background image
-                    Image("Log")
+                    Image("LoginUI")
                         .resizable()
                         .scaledToFill()
                         .edgesIgnoringSafeArea(.all)
-                    ZStack {
-                        Image("card")
-                            .resizable()
-                            .scaledToFit()
-                            .cornerRadius(20)
-                            .shadow(radius: 10).frame(width: 600, height: 600)
-                        
+
                         // Foreground content
-                        VStack {
+                        VStack(alignment: .center){
                         
                            
 
@@ -93,9 +87,7 @@ struct LogInView: View {
                                     .padding(.bottom,20)
                             }
                             
-                            NavigationLink(destination: DashboardView(),isActive: $loginButtonTapped) {
-                                EmptyView()
-                            }
+
                                                     Button(action: {
                                                        login()
                                                     }) {
@@ -108,14 +100,13 @@ struct LogInView: View {
                                                             .padding(.horizontal, 20)
                                                     }
                                                  
-                            NavigationLink(destination: DashboardView(),isActive: $loginButtonTapped) {
+                            NavigationLink(destination: ContentView() .navigationBarBackButtonHidden(true) .navigationBarHidden(true) ,isActive: $loginButtonTapped) {
                                 EmptyView()
                             }
                                                     Spacer()
 
                                                 }
-                            
-                                            }
+             
                             
                                         }
                                         .navigationBarTitle("")

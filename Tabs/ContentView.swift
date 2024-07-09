@@ -115,7 +115,7 @@ struct TopFrameView: View {
             .background(Color.white)
             .overlay(
                 Rectangle()
-                    .frame(height: 2) // Adjust border thickness
+                    .frame(height: 1) // Adjust border thickness
                     .foregroundColor(.gray),
                 alignment: .bottom
             )
