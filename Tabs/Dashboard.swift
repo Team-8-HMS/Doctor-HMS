@@ -10,48 +10,53 @@ import SwiftUI
 
 // DashboardView
 struct DashboardView: View {
-    var todayAppointments: [Appointment] {
-        appointments.filter { $0.date.isSameDay(as: Date()) }
+    var todayAppointments: [FirebaseAppointment] {
+        app.filter { $0.date.isSameDay(as: Date()) }
     }
     
-    var pendingAppointments: [Appointment] {
+    var pendingAppointments: [FirebaseAppointment] {
         todayAppointments.filter { $0.status == "Pending" }
     }
 
     var body: some View {
         
-        VStack(alignment: .leading) {
-            
-            HStack {
-                GreetingView()
-                Spacer()
-                DateView()
-            }
-            .padding(.bottom, 20)
-
-            HStack(spacing: 5) {
-                CardView(title: "Total Patients for today", number: todayAppointments.count, imageName: "person.2.fill", backgroundColor: Color(hex: "#DDE2F2"))
-                CardView(title: "Remaining Appointments", number: pendingAppointments.count, imageName: "calendar.badge.clock", backgroundColor: Color(hex: "#DDE2F2"))
-            }
-            .padding()
-            .frame(height: 200)
-            
-            Text("Today's Patient List")
-                .font(.title) // Adjust font size here
-                .fontWeight(.bold)
-                .padding(.top, 30)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            HeaderRow()
-            List {
-                // Filter appointments for today's date
-                ForEach(todayAppointments) { appointment in
-                    PatientRow(patient: appointment.patient)
+        ScrollView {
+            VStack(alignment: .leading) {
+                
+                HStack {
+                    GreetingView()
+                    Spacer()
+                    DateView()
                 }
+                .padding(.bottom, 20)
+
+                HStack(spacing: 5) {
+                    CardView(title: "Total Patients for today", number: todayAppointments.count, imageName: "person.2.fill", backgroundColor: Color(hex: "#DDE2F2"))
+                    CardView(title: "Remaining Appointments", number: pendingAppointments.count, imageName: "calendar.badge.clock", backgroundColor: Color(hex: "#DDE2F2"))
+                }
+                .padding()
+                .frame(height: 200)
+                
+                Text("Today's Patient List")
+                    .font(.title) // Adjust font size here
+                    .fontWeight(.bold)
+                    .padding(.top, 30)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                HeaderRow()
+                List {
+                    // Filter appointments for today's date
+                    ForEach(todayAppointments) { appointment in
+                        
+                        PatientRow(patient: patientData[appointment.patientId] ?? Patient(id: "", name: "jgvjb", dob: Date.now, profileImage: "", status: ""))
+                        
+                        
+                    }
+                }
+                .listStyle(PlainListStyle())
+                .padding(.horizontal)
             }
-            .listStyle(PlainListStyle())
             .padding(.horizontal)
         }
-        .padding(.horizontal)
     }
 }
 
@@ -181,6 +186,7 @@ struct PatientRow: View {
             NavigationLink(destination: DoctorNotesView()) {
                 HStack(spacing: 10) {
                     
+                    
                     Image(patient.profileImage)
                         .resizable()
                         .frame(width: 80, height: 80)
@@ -191,7 +197,7 @@ struct PatientRow: View {
                         Text(patient.name)
                             .font(.headline)
                             .lineLimit(1) // Limit name to 1 line
-                        Text(patient.disease)
+                        Text("\(patient.dob)")
                             .font(.subheadline)
                             .lineLimit(2) // Limit disease to 2 lines
                     }
@@ -199,13 +205,13 @@ struct PatientRow: View {
                     
                     Spacer()
                     
-                    Text(patient.timing)
-                        .font(.subheadline)
-                        .frame(width: 200, alignment: .leading) // Fixed width for timing
-                        .padding(.leading, 60)
-                        .multilineTextAlignment(.center)
-                    
-                    Spacer()
+//                    Text(patient.timing)
+//                        .font(.subheadline)
+//                        .frame(width: 200, alignment: .leading) // Fixed width for timing
+//                        .padding(.leading, 60)
+//                        .multilineTextAlignment(.center)
+//                    
+//                    Spacer()
                     
                     Text(patient.status)
                         .fontWeight(.bold)

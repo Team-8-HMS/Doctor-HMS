@@ -17,7 +17,7 @@ struct ScheduleView: View {
                 .padding(.bottom, 20)
             
             List {
-                ForEach(appointments.filter { $0.date.isSameDay(as: selectedDate) }) { appointment in
+                ForEach(app.filter { $0.date.isSameDay(as: selectedDate) }) { appointment in
                     AppointmentRow(appointment: appointment)
                 }
             }
@@ -104,35 +104,35 @@ struct CalendarView: View {
 
 //AppointmentRow 
 struct AppointmentRow: View {
-    var appointment: Appointment
+    var appointment: FirebaseAppointment
 
     var body: some View {
         HStack {
-            Image(appointment.patient.profileImage)
+            Image("appointment.patient.profileImage")
                 .resizable()
                 .frame(width: 80, height: 80)
                 .clipShape(Circle())
                 .padding(.trailing, 10)
             
             VStack(alignment: .leading) {
-                Text(appointment.patient.name)
+                Text(appointment.patientId)
                     .font(.headline)
-                Text(appointment.patient.disease)
+                Text("\(appointment.date)")
                     .font(.subheadline)
                
             }
             Spacer()
-            Text(appointment.patient.timing)
+            Text(appointment.timeSlot)
                 .font(.subheadline)
             Spacer()
-            Text(appointment.status)
-                .foregroundColor(statusColor(for: appointment.patient.status))
-                .multilineTextAlignment(.center)
-                .padding(.vertical, 10)
-                .padding(.horizontal,50) // horizontal padding for status
-                .background(statusBackgroundColor(for: appointment.patient.status))
-                .cornerRadius(8)
-                .frame(width: 200, alignment: .center)
+//            Text(appointment.status)
+//                .foregroundColor(statusColor(for: appointment.patient.status))
+//                .multilineTextAlignment(.center)
+//                .padding(.vertical, 10)
+//                .padding(.horizontal,50) // horizontal padding for status
+//                .background(statusBackgroundColor(for: appointment.patient.status))
+//                .cornerRadius(8)
+//                .frame(width: 200, alignment: .center)
             Spacer()
             Image(systemName: "chevron.right")
         }

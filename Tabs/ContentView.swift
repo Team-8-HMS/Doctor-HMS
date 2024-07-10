@@ -131,20 +131,24 @@ struct ProfileView: View {
         VStack {
             HStack {
                 ZStack {
-                    Image("DrProfile")
-                        .resizable()
-                        .frame(width: 80, height: 80)
-                        .clipShape(Circle())
-                        .padding(10)
+                    AsyncImage(url: URL(string: currentDoctor.imageURL)){image in
+                        image
+                            .image?.resizable()
+                            .frame(width: 80, height: 80)
+                            .clipShape(Circle())
+                            .padding(10)
+                        
+                    }
+                        
                 }
                 .frame(width: 80, height: 80)
                 .padding(.trailing, 10)
 
                 VStack(alignment: .leading) {
-                    Text("Dr. S Nirnay ")
+                    Text(currentDoctor.name)
                         .fontWeight(.bold)
                         .font(.largeTitle)
-                    Text("Department")
+                    Text(currentDoctor.department)
                         .font(.title3)
                 }
             }
