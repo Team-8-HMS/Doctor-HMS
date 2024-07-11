@@ -17,6 +17,9 @@
 		B0398FD62C3BE43700AD6BD0 /* DoctorNotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0398FD52C3BE43700AD6BD0 /* DoctorNotesView.swift */; };
 		B0398FD82C3C016100AD6BD0 /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0398FD72C3C016100AD6BD0 /* LogInView.swift */; };
 		B0398FDA2C3C01B200AD6BD0 /* ForgotPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0398FD92C3C01B200AD6BD0 /* ForgotPassword.swift */; };
+		B0903C162C3F907700F08682 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0903C152C3F907700F08682 /* extensions.swift */; };
+		B0903C182C3F91DB00F08682 /* videoCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0903C172C3F91DB00F08682 /* videoCall.swift */; };
+		B0903C1A2C3F92E200F08682 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0903C192C3F92E200F08682 /* ProfileView.swift */; };
 		B0ADC44C2C3BD4B60025AE9D /* PatientListDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0ADC44B2C3BD4B60025AE9D /* PatientListDataModel.swift */; };
 		B0B86CC12C3900E400711665 /* Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B86CC02C3900E400711665 /* Schedule.swift */; };
 		B0B86CC52C39022400711665 /* Dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B86CC42C39022400711665 /* Dashboard.swift */; };
@@ -24,7 +27,6 @@
 		E676C6742C365D3F000CAE39 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E676C6732C365D3F000CAE39 /* ContentView.swift */; };
 		E676C6762C365D42000CAE39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E676C6752C365D42000CAE39 /* Assets.xcassets */; };
 		E676C6792C365D42000CAE39 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E676C6782C365D42000CAE39 /* Preview Assets.xcassets */; };
-		E676C6802C365DD8000CAE39 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E676C67F2C365DD8000CAE39 /* HomeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,9 @@
 		B0398FD52C3BE43700AD6BD0 /* DoctorNotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorNotesView.swift; sourceTree = "<group>"; };
 		B0398FD72C3C016100AD6BD0 /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
 		B0398FD92C3C01B200AD6BD0 /* ForgotPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPassword.swift; sourceTree = "<group>"; };
+		B0903C152C3F907700F08682 /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
+		B0903C172C3F91DB00F08682 /* videoCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = videoCall.swift; sourceTree = "<group>"; };
+		B0903C192C3F92E200F08682 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		B0ADC44B2C3BD4B60025AE9D /* PatientListDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientListDataModel.swift; sourceTree = "<group>"; };
 		B0B86CC02C3900E400711665 /* Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schedule.swift; sourceTree = "<group>"; };
 		B0B86CC42C39022400711665 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
@@ -42,7 +47,6 @@
 		E676C6732C365D3F000CAE39 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E676C6752C365D42000CAE39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E676C6782C365D42000CAE39 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		E676C67F2C365DD8000CAE39 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,9 +77,12 @@
 			isa = PBXGroup;
 			children = (
 				E676C6732C365D3F000CAE39 /* ContentView.swift */,
+				B0903C192C3F92E200F08682 /* ProfileView.swift */,
 				B0B86CC42C39022400711665 /* Dashboard.swift */,
 				B0B86CC02C3900E400711665 /* Schedule.swift */,
 				B0398FD12C3BE2E200AD6BD0 /* Request.swift */,
+				B0903C152C3F907700F08682 /* extensions.swift */,
+				B0903C172C3F91DB00F08682 /* videoCall.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -106,7 +113,6 @@
 			isa = PBXGroup;
 			children = (
 				E676C6712C365D3F000CAE39 /* Doctor_HMSApp.swift */,
-				E676C67F2C365DD8000CAE39 /* HomeView.swift */,
 				E676C6752C365D42000CAE39 /* Assets.xcassets */,
 				E676C6772C365D42000CAE39 /* Preview Content */,
 			);
@@ -202,9 +208,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0398FD82C3C016100AD6BD0 /* LogInView.swift in Sources */,
-				E676C6802C365DD8000CAE39 /* HomeView.swift in Sources */,
 				B0ADC44C2C3BD4B60025AE9D /* PatientListDataModel.swift in Sources */,
 				E676C6742C365D3F000CAE39 /* ContentView.swift in Sources */,
+				B0903C182C3F91DB00F08682 /* videoCall.swift in Sources */,
 				B0B86CC12C3900E400711665 /* Schedule.swift in Sources */,
 				B0398FD42C3BE41E00AD6BD0 /* PencilKitView.swift in Sources */,
 				B0398FD22C3BE2E200AD6BD0 /* Request.swift in Sources */,
@@ -212,6 +218,8 @@
 				B0398FD62C3BE43700AD6BD0 /* DoctorNotesView.swift in Sources */,
 				E676C6722C365D3F000CAE39 /* Doctor_HMSApp.swift in Sources */,
 				B0398FDA2C3C01B200AD6BD0 /* ForgotPassword.swift in Sources */,
+				B0903C1A2C3F92E200F08682 /* ProfileView.swift in Sources */,
+				B0903C162C3F907700F08682 /* extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,104 +1,107 @@
 import SwiftUI
-
-// Color Extension for Hex Conversion
-extension Color {
-    init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
-        let a, r, g, b: UInt64
-        switch hex.count {
-        case 3: // RGB (12-bit)
-            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6: // RGB (24-bit)
-            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        case 8: // ARGB (32-bit)
-            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
-        default:
-            (a, r, g, b) = (255, 0, 0, 0)
-        }
-        self.init(
-            .sRGB,
-            red: Double(r) / 255,
-            green: Double(g) / 255,
-            blue: Double(b) / 255,
-            opacity: Double(a) / 255
-        )
-    }
-}
-
-// ContentView
 struct ContentView: View {
-    
     @State private var selectedItem: String? = "Dashboard"
-    let items = ["Dashboard", "Schedule", "Video call", "Requests"]
-    let icons = ["house", "calendar", "video", "envelope"]
-
+    @State private var showLogoutConfirmation = false
+    @State private var isLoggedOut = false
+    let items = ["Dashboard", "Schedule", "Video call", "Requests","Profile"]
+    let icons = ["house", "calendar", "video", "envelope","person"]
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(Array(zip(items, icons)), id: \.0) { item, icon in
-                    HStack {
-                        Image(systemName: icon)
-                            .foregroundColor(selectedItem == item ? .white : .primary)
-                        Text(item)
-                            .foregroundColor(selectedItem == item ? .white : .primary)
+        NavigationStack {
+            VStack {
+                NavigationSplitView {
+                    List {
+                        ForEach(Array(zip(items, icons)), id: \.0) { item, icon in
+                            HStack {
+                                Image(systemName: icon)
+                                    .foregroundColor(selectedItem == item ? .white : .primary)
+                                Text(item)
+                                    .foregroundColor(selectedItem == item ? .white : .primary)
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(
+                                selectedItem == item ? Color(UIColor(red: 225 / 255, green: 101 / 255, blue: 74 / 255, alpha: 1)) : Color.clear
+                            )
+                            .cornerRadius(10)
+                            .padding(.horizontal, 0)
+                            .listRowBackground(Color.clear)
+                            .onTapGesture {
+                                if item == "Logout" {
+                                    showLogoutConfirmation = true
+                                } else {
+                                    selectedItem = item
+                                }
+                            }
+                        }
                     }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(
-                        selectedItem == item ? Color(UIColor(red: 225 / 255, green: 101 / 255, blue: 74 / 255, alpha: 1)) : Color.clear
-                    )
-                    .cornerRadius(10)
-                    .padding(.horizontal, 0)
-                    .listRowBackground(Color.clear)
-                    .onTapGesture {
-                        selectedItem = item
+                    .navigationTitle("Admin")
+//                    .navigationBarBackButtonHidden(true)
+                    .listStyle(PlainListStyle())
+                    .background(Color.white)
+                    .padding(EdgeInsets(top: 80, leading: 0, bottom: 30, trailing: 10))
+                }
+                detail: {
+                    if let selectedItem = selectedItem {
+                        destinationView(for: selectedItem)
+                            .background(Color.gray.opacity(0.1)) // background color for detail view
+                    } else {
+                        Text("Select an item")
                     }
                 }
+                .alert(isPresented: $showLogoutConfirmation) {
+                    Alert(
+                        title: Text("Logout"),
+                        message: Text("Are you sure you want to log out?"),
+                        primaryButton: .destructive(Text("OK"), action: {
+                            // Handle logout action
+//                            logout()
+                        }),
+                        secondaryButton: .cancel()
+                    )
+                }
+//                
+//                NavigationLink(destination: LoginMain()
+//                                .navigationBarBackButtonHidden(true)
+//                                .navigationBarHidden(true),
+//                               isActive: $isLoggedOut) {
+//                    EmptyView()
+//                }
             }
-            .navigationTitle("App Name")
-            .listStyle(PlainListStyle())
-            .background(Color.white)
-            .padding(EdgeInsets(top: 80, leading: 0, bottom: 30, trailing: 10))
-        } detail: {
-            if let selectedItem = selectedItem {
-                DetailView(item: selectedItem)
-                    .background(Color.gray.opacity(0.1))
-            } else {
-                Text("Select an item")
-            }
+//            .navigationBarHidden(true)
         }
     }
-}
-
-// DetailView
-struct DetailView: View {
-    var item: String
-    @State private var selectedDate = Date()
-
-    var body: some View {
-        VStack {
-            TopFrameView()
+    
+    @ViewBuilder
+    func destinationView(for menuItem: String) -> some View {
+        switch menuItem {
+        case "Dashboard": // Case 1 call
+            DashboardView()
+        case "Schedule" : // Case 2
+            ScheduleView()
+        case "Video call":
+            videoCallView()
         
-            if item == "Dashboard" {
-                DashboardView()
-            } else if item == "Schedule" {
-                ScheduleView()
-            } else if item == "Requests" {
-                RequestView()
-            }else {
-                Text("Detail for \(item)")
-                    .font(.largeTitle)
-                    .padding()
-            }
+        case "Requests":
+            RequestView()
+        case "Profile":
+            ProfileView()
+      
+        default:
+            Text("Unknown selection")
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .padding(.top, 0)
     }
+    
+//    func logout() {
+//        do {
+//            try Auth.auth().signOut()
+//            isLoggedOut = true
+//        } catch let signOutError as NSError {
+//            print("Error signing out: %@", signOutError)
+//        }
+//    }
 }
 
-//proile's frame
+
 struct TopFrameView: View {
     var body: some View {
         VStack(spacing: 0) {
@@ -126,79 +129,44 @@ struct TopFrameView: View {
 
 
 // Doctor Profile
-struct ProfileView: View {
-    var body: some View {
-        VStack {
-            HStack {
-                ZStack {
-                    AsyncImage(url: URL(string: currentDoctor.imageURL)){image in
-                        image
-                            .image?.resizable()
-                            .frame(width: 80, height: 80)
-                            .clipShape(Circle())
-                            .padding(10)
-                        
-                    }
-                        
-                }
-                .frame(width: 80, height: 80)
-                .padding(.trailing, 10)
-
-                VStack(alignment: .leading) {
-                    Text(currentDoctor.name)
-                        .fontWeight(.bold)
-                        .font(.largeTitle)
-                    Text(currentDoctor.department)
-                        .font(.title3)
-                }
-            }
-            .padding()
-        }
-    }
-}
-
-
+//struct ProfileView: View {
+//    var body: some View {
+//        VStack {
+//            HStack {
+//                ZStack {
+//                    AsyncImage(url: URL(string: currentDoctor.imageURL)){image in
+//                        image
+//                            .image?.resizable()
+//                            .frame(width: 80, height: 80)
+//                            .clipShape(Circle())
+//                            .padding(10)
+//                        
+//                    }
+//                        
+//                }
+//                .frame(width: 80, height: 80)
+//                .padding(.trailing, 10)
+//
+//                VStack(alignment: .leading) {
+//                    Text(currentDoctor.name)
+//                        .fontWeight(.bold)
+//                        .font(.largeTitle)
+//                    Text(currentDoctor.department)
+//                        .font(.title3)
+//                }
+//            }
+//            .padding()
+//        }
+//    }
+//}
 
 
 
 
 
-let dateFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-    return formatter
-}()
 
-extension Date {
-    func formattedMonthAndYear() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM yyyy"
-        return formatter.string(from: self)
-    }
 
-    func formattedDay() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "E"
-        return formatter.string(from: self)
-    }
 
-    func formattedDate() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d"
-        return formatter.string(from: self)
-    }
-
-    func isSameDay(as date: Date) -> Bool {
-        let calendar = Calendar.current
-        return calendar.isDate(self, inSameDayAs: date)
-    }
-
-    var startOfWeek: Date? {
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)
-        return calendar.date(from: components)
-    }
-}
 
 //Preview
 

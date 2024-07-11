@@ -1,12 +1,4 @@
-//
-//  Dashboard.swift
-//  Doctor-HMS
-//
-//  Created by Rishita kumari on 06/07/24.
-//
-
 import SwiftUI
-
 
 // DashboardView
 struct DashboardView: View {
@@ -19,7 +11,6 @@ struct DashboardView: View {
     }
 
     var body: some View {
-        
         ScrollView {
             VStack(alignment: .leading) {
                 
@@ -35,21 +26,19 @@ struct DashboardView: View {
                     CardView(title: "Remaining Appointments", number: pendingAppointments.count, imageName: "calendar.badge.clock", backgroundColor: Color(hex: "#DDE2F2"))
                 }
                 .padding()
-                .frame(height: 200)
-                
+                .frame(minHeight: 200)
+
                 Text("Today's Patient List")
-                    .font(.title) // Adjust font size here
+                    .font(.title)
                     .fontWeight(.bold)
                     .padding(.top, 30)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                
                 HeaderRow()
+                
                 List {
-                    // Filter appointments for today's date
                     ForEach(todayAppointments) { appointment in
-                        
-                        PatientRow(patient: patientData[appointment.patientId] ?? Patient(id: "", name: "jgvjb", dob: Date.now, profileImage: "", status: ""))
-                        
-                        
+                        PatientRow(patient: patientData[appointment.patientId] ?? Patient(id: "", name: "Unknown", dob: Date(), profileImage: "", status: ""))
                     }
                 }
                 .listStyle(PlainListStyle())
@@ -60,10 +49,7 @@ struct DashboardView: View {
     }
 }
 
-
-
-
-//header row at dashboard
+// Header row at dashboard
 struct HeaderRow: View {
     var body: some View {
         HStack {
@@ -71,10 +57,6 @@ struct HeaderRow: View {
                 .font(.subheadline)
                 .frame(width: 100, alignment: .leading)
                 .padding(.leading, 150)
-//            Text("Gender")
-//                .font(.subheadline)
-//                .frame(width: 60, alignment: .leading)
-//                .padding(.leading,60)
             Text("Timing")
                 .font(.subheadline)
                 .frame(width: 100, alignment: .leading)
@@ -95,21 +77,18 @@ struct HeaderRow: View {
         .cornerRadius(10)
     }
 }
-// Components
 
+// Components
 struct GreetingView: View {
     var body: some View {
-        
         VStack(alignment: .leading, spacing: 5) {
             Text("Good morning!")
-                //.font(.largeTitle)
                 .font(.system(size: 40, weight: .bold))
                 .fontWeight(.bold)
                 .padding(.top, -50)
             Text("Here are your important tasks for today:")
                 .font(.system(size: 25))
                 .foregroundColor(.gray)
-                
         }
         .padding(.vertical, 0)
         .padding(.horizontal, 10)
@@ -123,11 +102,8 @@ struct DateView: View {
                 .resizable()
                 .frame(width: 24, height: 24)
                 .padding(.trailing, 5)
-//            Text(Date().formattedDay())
-//                .font(.subheadline)
             Text(Date().formattedDate())
                 .font(.title3)
-                
             Text(Date().formattedMonthAndYear())
                 .font(.subheadline)
         }
@@ -175,18 +151,13 @@ struct CardView: View {
 
 // Patient row
 struct PatientRow: View {
-    
     var patient: Patient
     @State private var isSelected = false
-    
+
     var body: some View {
-        
-        NavigationStack{
-            
+        NavigationStack {
             NavigationLink(destination: DoctorNotesView()) {
                 HStack(spacing: 10) {
-                    
-                    
                     Image(patient.profileImage)
                         .resizable()
                         .frame(width: 80, height: 80)
@@ -196,36 +167,26 @@ struct PatientRow: View {
                     VStack(alignment: .leading, spacing: 5) {
                         Text(patient.name)
                             .font(.headline)
-                            .lineLimit(1) // Limit name to 1 line
+                            .lineLimit(1)
                         Text("\(patient.dob)")
                             .font(.subheadline)
-                            .lineLimit(2) // Limit disease to 2 lines
+                            .lineLimit(2)
                     }
                     .padding(.leading, 10)
-                    
+
                     Spacer()
-                    
-//                    Text(patient.timing)
-//                        .font(.subheadline)
-//                        .frame(width: 200, alignment: .leading) // Fixed width for timing
-//                        .padding(.leading, 60)
-//                        .multilineTextAlignment(.center)
-//                    
-//                    Spacer()
-                    
+
                     Text(patient.status)
                         .fontWeight(.bold)
                         .foregroundColor(statusColor(for: patient.status))
                         .multilineTextAlignment(.center)
                         .padding(.vertical, 10)
-                        .padding(.horizontal,50) // horizontal padding for status
+                        .padding(.horizontal, 50)
                         .background(statusBackgroundColor(for: patient.status))
                         .cornerRadius(8)
-                        .frame(width: 200, alignment: .center) // Fixed width for status background
+                        .frame(width: 200, alignment: .center)
                     
                     Spacer()
-                    
-                        
                 }
             }
         }
@@ -234,38 +195,30 @@ struct PatientRow: View {
     private func statusColor(for status: String) -> Color {
         switch status {
         case "Pending":
-            return Color(red: 218/255, green: 59/255, blue: 19/255)
+            return Color(red: 218 / 255, green: 59 / 255, blue: 19 / 255)
         case "Done":
-            return Color(red: 101/255, green:200/255, blue: 102/255)
+            return Color(red: 101 / 255, green: 200 / 255, blue: 102 / 255)
         case "Progress":
-            return Color(red: 50/255, green: 0/255, blue: 255/255)
+            return Color(red: 50 / 255, green: 0 / 255, blue: 255 / 255)
         default:
-            return .gray // default color if status is unrecognized
+            return .gray
         }
     }
 
     private func statusBackgroundColor(for status: String) -> Color {
         switch status {
         case "Pending":
-            return Color(red: 250/255, green: 224/255, blue: 229/255)
+            return Color(red: 250 / 255, green: 224 / 255, blue: 229 / 255)
         case "Done":
-            return Color(red: 230/255, green: 246/255, blue: 231/255)
+            return Color(red: 230 / 255, green: 246 / 255, blue: 231 / 255)
         case "Progress":
-            return Color(red: 230/255, green: 230/255, blue: 247/255)
+            return Color(red: 230 / 255, green: 230 / 255, blue: 247 / 255)
         default:
             return Color.gray.opacity(0.2)
         }
     }
 }
 
-
-
-
-//struct Dashboard_Previews: PreviewProvider {
-//    static var previews: some View {
-//        DashboardView()
-//    }
-//}
 #Preview {
     DashboardView()
 }
