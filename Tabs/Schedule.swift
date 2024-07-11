@@ -40,9 +40,15 @@ struct CalendarView: View {
         return (0...6).compactMap { calendar.date(byAdding: .day, value: $0, to: startOfWeek) }
     }
     
+    private var currentMonth: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM yyyy"
+        return dateFormatter.string(from: selectedDate)
+    }
+    
     var body: some View {
         VStack {
-            Text(selectedDate.formattedMonthAndYear())
+            Text(currentMonth)
                 .font(.system(size: 40))
                 .fontWeight(.bold)
                 .padding(.top, -40)
@@ -50,6 +56,9 @@ struct CalendarView: View {
             HStack {
                 Button(action: {
                     weekOffset -= 1
+                    let today = calendar.startOfDay(for: Date())
+                    let startOfWeek = calendar.date(byAdding: .day, value: weekOffset * 7, to: today.startOfWeek!)!
+                    selectedDate = startOfWeek // update the selected date
                 }) {
                     Image(systemName: "chevron.left")
                         .font(.title)
@@ -89,6 +98,9 @@ struct CalendarView: View {
                 
                 Button(action: {
                     weekOffset += 1
+                    let today = calendar.startOfDay(for: Date())
+                    let startOfWeek = calendar.date(byAdding: .day, value: weekOffset * 7, to: today.startOfWeek!)!
+                    selectedDate = startOfWeek // update the selected date
                 }) {
                     Image(systemName: "chevron.right")
                         .font(.title)
@@ -100,9 +112,7 @@ struct CalendarView: View {
     }
 }
 
-
-
-//AppointmentRow 
+// AppointmentRow
 struct AppointmentRow: View {
     var appointment: FirebaseAppointment
 
@@ -119,27 +129,16 @@ struct AppointmentRow: View {
                     .font(.headline)
                 Text("\(appointment.date)")
                     .font(.subheadline)
-               
             }
             Spacer()
             Text(appointment.timeSlot)
                 .font(.subheadline)
             Spacer()
-//            Text(appointment.status)
-//                .foregroundColor(statusColor(for: appointment.patient.status))
-//                .multilineTextAlignment(.center)
-//                .padding(.vertical, 10)
-//                .padding(.horizontal,50) // horizontal padding for status
-//                .background(statusBackgroundColor(for: appointment.patient.status))
-//                .cornerRadius(8)
-//                .frame(width: 200, alignment: .center)
-            Spacer()
             Image(systemName: "chevron.right")
         }
         .padding()
-        
-               
     }
+
     private func statusColor(for status: String) -> Color {
         switch status {
         case "Pending":
@@ -167,10 +166,8 @@ struct AppointmentRow: View {
     }
 }
 
-//
 //struct Schedule_Previews: PreviewProvider {
 //    static var previews: some View {
 //        ScheduleView()
 //    }
 //}
-
