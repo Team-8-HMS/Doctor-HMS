@@ -34,8 +34,10 @@ struct RequestView: View {
                 Text("Request Form").tag(0)
                 Text("Requests Sent").tag(1)
             }
+            
             .pickerStyle(SegmentedPickerStyle())
             .padding()
+
 
             if selectedSegment == 0 {
                 requestFormView
@@ -43,6 +45,8 @@ struct RequestView: View {
                 requestsSentView
             }
         }
+
+       
         .navigationTitle("Request")
         .padding()
         .alert(isPresented: $showingAlert) {

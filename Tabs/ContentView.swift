@@ -34,7 +34,7 @@ struct ContentView: View {
                             }
                         }
                     }
-                    .navigationTitle("Admin")
+                    .navigationTitle("Doctor")
 //                    .navigationBarBackButtonHidden(true)
                     .listStyle(PlainListStyle())
                     .background(Color.white)
@@ -84,7 +84,7 @@ struct ContentView: View {
         case "Requests":
             RequestView()
         case "Profile":
-            ProfileView()
+            DoctorProfileView()
       
         default:
             Text("Unknown selection")
@@ -110,7 +110,7 @@ struct TopFrameView: View {
                 
                 HStack {
                     Spacer()
-                    ProfileView()
+                    DoctorProfileView()
                 }
                 .padding(.horizontal)
             }

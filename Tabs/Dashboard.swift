@@ -85,8 +85,8 @@ struct GreetingView: View {
             Text("Good morning!")
                 .font(.system(size: 40, weight: .bold))
                 .fontWeight(.bold)
-                .padding(.top, -50)
-            Text("Here are your important tasks for today:")
+                .padding(.top, 0)
+            Text("Here are your important updates for today.")
                 .font(.system(size: 25))
                 .foregroundColor(.gray)
         }
