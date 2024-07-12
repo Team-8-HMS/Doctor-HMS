@@ -43,7 +43,7 @@ struct ContentView: View {
                 detail: {
                     if let selectedItem = selectedItem {
                         destinationView(for: selectedItem)
-                            .background(Color.gray.opacity(0.1)) // background color for detail view
+                            .background(Color(#colorLiteral(red: 242/255, green: 242/255, blue: 247/255, alpha: 1))) // background color for detail view
                     } else {
                         Text("Select an item")
                     }
