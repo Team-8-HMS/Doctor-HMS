@@ -21,9 +21,9 @@ struct DashboardView: View {
                 }
                 .padding(.bottom, 20)
 
-                HStack(spacing: 5) {
-                    CardView(title: "Total Patients for today", number: todayAppointments.count, imageName: "person.2.fill", backgroundColor: Color(hex: "#DDE2F2"))
-                    CardView(title: "Remaining Appointments", number: pendingAppointments.count, imageName: "calendar.badge.clock", backgroundColor: Color(hex: "#DDE2F2"))
+                HStack(spacing:40) {
+                    CardView(title: "Total Patients for today", number: todayAppointments.count, imageName: "person.2.fill", backgroundColor: Color(hex: "#531B93").opacity(0.1))
+                    CardView(title: "Remaining Appointments", number: pendingAppointments.count, imageName: "calendar.badge.clock", backgroundColor: Color(hex: "#531B93").opacity(0.1))
                 }
                 .padding()
                 .frame(minHeight: 200)
@@ -127,11 +127,11 @@ struct CardView: View {
                 Image(systemName: imageName)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 40, height: 40)
+                    .frame(width: 50, height: 50)
                     .padding(10)
                     .background(backgroundColor)
                     .cornerRadius(10)
-                    .padding(.trailing, 10)
+                    .padding(.trailing,30)
                 VStack(alignment: .leading) {
                     Text(title)
                         .font(.headline)
@@ -142,10 +142,10 @@ struct CardView: View {
             }
             .padding()
         }
-        .frame(maxWidth: .infinity, minHeight: 150)
-        .background(Color.white)
+        .frame(maxWidth: .infinity, minHeight: 170)
+        .background()
         .cornerRadius(10)
-        .shadow(radius: 5)
+        .shadow(radius: 3)
     }
 }
 
