@@ -39,8 +39,6 @@ struct Appointment: Identifiable {
     var patient: Patient
 }
 
-
-
 // Sample data
 var patientData:[String:Patient] = [:]
 
