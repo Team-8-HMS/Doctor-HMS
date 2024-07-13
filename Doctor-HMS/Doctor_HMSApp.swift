@@ -6,18 +6,23 @@
 //
 
 import SwiftUI
-import Firebase
+import FirebaseCore
+import FirebaseAuth
 @main
 struct YourApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if Auth.auth().currentUser != nil{
+                ContentView()
+            }
+            else{
+                LogInView()
+            }
         }
     }
 }
-
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
