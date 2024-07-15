@@ -126,7 +126,7 @@ struct ProfileImageView: View {
                             .background(Color.gray.opacity(0.1))
                             .clipShape(Circle())
                             .overlay(
-                                Circle().stroke(Color.white, lineWidth: 4))
+                                Circle().stroke(Color.white, lineWidth: 2))
                     case .success(let image):
                         image
                             .resizable()
@@ -134,7 +134,7 @@ struct ProfileImageView: View {
                             .frame(width: 200, height: 200)
                             .clipShape(Circle())
                             .overlay(
-                                Circle().stroke(Color.white, lineWidth: 4))
+                                Circle().stroke(Color.white, lineWidth: 2))
                             .shadow(radius: 10)
                             .padding(.top)
                             .foregroundColor(Color(#colorLiteral(red: 0.878, green: 0.365, blue: 0.29, alpha: 1)))
@@ -145,7 +145,7 @@ struct ProfileImageView: View {
                             .frame(width: 200, height: 200)
                             .clipShape(Circle())
                             .overlay(
-                                Circle().stroke(Color.white, lineWidth: 4))
+                                Circle().stroke(Color.white, lineWidth: 2))
                             .padding(.top)
                             .foregroundColor(Color(#colorLiteral(red: 0.878, green: 0.365, blue: 0.29, alpha: 1)))
                             
@@ -170,7 +170,7 @@ struct ProfileImageView: View {
                 .fontWeight(.bold)
                 .padding(.top, 10)
         }
-        .frame(maxWidth: 200)
+        .frame(maxWidth: .infinity)
         .padding(.top, -20)
     }
 }

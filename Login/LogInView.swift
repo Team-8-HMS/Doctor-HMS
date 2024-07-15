@@ -166,6 +166,7 @@ struct LogInView: View {
 //                else{
                     doctorId = (firebaseResult?.user.uid)!
                     fetchAppointments()
+                
                 fetchDoctor(doctorId: doctorId)
 //                fetchAllPatientData()
                     print(doctorId)

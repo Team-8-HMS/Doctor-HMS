@@ -21,7 +21,7 @@ struct DashboardView: View {
                 }
                 .padding(.bottom, 20)
 
-                HStack(spacing:40) {
+                HStack(spacing: 40) {
                     CardView(title: "Total Patients for today", number: todayAppointments.count, imageName: "person.2.fill", backgroundColor: Color(hex: "#531B93").opacity(0.1))
                     CardView(title: "Remaining Appointments", number: pendingAppointments.count, imageName: "calendar.badge.clock", backgroundColor: Color(hex: "#531B93").opacity(0.1))
                 }
@@ -42,11 +42,15 @@ struct DashboardView: View {
                     }
                 }
                 .listStyle(PlainListStyle())
-                .padding(.horizontal)
+                .frame(height: CGFloat(todayAppointments.count) * 80) // Adjust height based on number of appointments
+            }
+            .onAppear{
+                fetchAppointments()
             }
             .padding(.horizontal)
         }
     }
+        
 }
 
 // Header row at dashboard
@@ -60,11 +64,11 @@ struct HeaderRow: View {
             Text("Timing")
                 .font(.subheadline)
                 .frame(width: 100, alignment: .leading)
-                .padding(.leading, 130)
-            Text("Status")
-                .font(.subheadline)
-                .frame(width: 100, alignment: .leading)
-                .padding(.leading, 210)
+                .padding(.leading, 350)
+//            Text("Status")
+//                .font(.subheadline)
+//                .frame(width: 100, alignment: .leading)
+//                .padding(.leading, 210)
             Spacer()
             Image(systemName: " ")
                 .font(.subheadline)
@@ -131,7 +135,7 @@ struct CardView: View {
                     .padding(10)
                     .background(backgroundColor)
                     .cornerRadius(10)
-                    .padding(.trailing,30)
+                    .padding(.trailing, 30)
                 VStack(alignment: .leading) {
                     Text(title)
                         .font(.headline)
@@ -178,11 +182,11 @@ struct PatientRow: View {
 
                     Text(patient.status)
                         .fontWeight(.bold)
-                        .foregroundColor(statusColor(for: patient.status))
+                       // .foregroundColor(statusColor(for: patient.status))
                         .multilineTextAlignment(.center)
                         .padding(.vertical, 10)
                         .padding(.horizontal, 50)
-                        .background(statusBackgroundColor(for: patient.status))
+                       // .background(statusBackgroundColor(for: patient.status))
                         .cornerRadius(8)
                         .frame(width: 200, alignment: .center)
                     
@@ -192,31 +196,31 @@ struct PatientRow: View {
         }
     }
 
-    private func statusColor(for status: String) -> Color {
-        switch status {
-        case "Pending":
-            return Color(red: 218 / 255, green: 59 / 255, blue: 19 / 255)
-        case "Done":
-            return Color(red: 101 / 255, green: 200 / 255, blue: 102 / 255)
-        case "Progress":
-            return Color(red: 50 / 255, green: 0 / 255, blue: 255 / 255)
-        default:
-            return .gray
-        }
-    }
-
-    private func statusBackgroundColor(for status: String) -> Color {
-        switch status {
-        case "Pending":
-            return Color(red: 250 / 255, green: 224 / 255, blue: 229 / 255)
-        case "Done":
-            return Color(red: 230 / 255, green: 246 / 255, blue: 231 / 255)
-        case "Progress":
-            return Color(red: 230 / 255, green: 230 / 255, blue: 247 / 255)
-        default:
-            return Color.gray.opacity(0.2)
-        }
-    }
+//    private func statusColor(for status: String) -> Color {
+//        switch status {
+//        case "Pending":
+//            return Color(red: 218 / 255, green: 59 / 255, blue: 19 / 255)
+//        case "Done":
+//            return Color(red: 101 / 255, green: 200 / 255, blue: 102 / 255)
+//        case "Progress":
+//            return Color(red: 50 / 255, green: 0 / 255, blue: 255 / 255)
+//        default:
+//            return .gray
+//        }
+//    }
+//
+//    private func statusBackgroundColor(for status: String) -> Color {
+//        switch status {
+//        case "Pending":
+//            return Color(red: 250 / 255, green: 224 / 255, blue: 229 / 255)
+//        case "Done":
+//            return Color(red: 230 / 255, green: 246 / 255, blue: 231 / 255)
+//        case "Progress":
+//            return Color(red: 230 / 255, green: 230 / 255, blue: 247 / 255)
+//        default:
+//            return Color.gray.opacity(0.2)
+//        }
+//    }
 }
 
 #Preview {
