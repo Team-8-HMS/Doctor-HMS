@@ -34,8 +34,9 @@ struct RequestView: View {
                 Text("Request Form").tag(0)
                 Text("Requests Sent").tag(1)
             }
-            
+        
             .pickerStyle(SegmentedPickerStyle())
+            .frame(height: 60)
             .padding()
 
 
@@ -45,8 +46,8 @@ struct RequestView: View {
                 requestsSentView
             }
         }
-
-       
+        .background(Color(red: 242/255, green: 242/255, blue: 247/255))
+        .edgesIgnoringSafeArea(.all)
         .navigationTitle("Request")
         .padding()
         .alert(isPresented: $showingAlert) {
@@ -56,39 +57,46 @@ struct RequestView: View {
             fetchRequests()
         }
     }
-    
     private var requestFormView: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Form {
-                Section {
+            VStack {
+                List {
                     DatePicker("From", selection: $fromDate, displayedComponents: .date)
+                        .frame(height: 60)
                     DatePicker("To", selection: $toDate, displayedComponents: .date)
+                        .frame(height: 60)
                     TextField("Message", text: $message)
                         .frame(height: 150, alignment: .top)
                 }
-                
+                .frame(height: 300)
                 Button(action: addRequest) {
                     Text("Submit")
-                        .frame(maxWidth: .infinity, alignment: .center)
+                        .frame(maxWidth: .infinity, maxHeight: 50)
                 }
+                .background(Color(UIColor(red: 225 / 255, green: 101 / 255, blue: 74 / 255, alpha: 1)))
+                .foregroundColor(.white)
+                .cornerRadius(10)
+                .padding(.top,40)
             }
             .cornerRadius(10)
+            .listStyle(.plain)
+            Spacer()
         }
         .padding(40)
-        .background(Color.white)
         .cornerRadius(10)
     }
+
     
     private var requestsSentView: some View {
         ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 197), spacing: 20)]) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 197), spacing: 40)]) {
                 ForEach(requests) { request in
                     RequestCardView(request: request)
                 }
             }
             .padding()
         }
-        .background(Color.white)
+        .background(Color(red: 242/255, green: 242/255, blue: 247/255))
         .cornerRadius(10)
     }
     
@@ -120,6 +128,7 @@ struct RequestView: View {
             }
         }
     }
+        
 }
 
 class FirestoreService {
@@ -179,50 +188,52 @@ struct RequestCardView: View {
     
     var body: some View {
         VStack {
-             Image(request.doctorImage)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 100, height: 100)
-                .clipShape(Circle())
-                .overlay(Circle().stroke(Color.black, lineWidth: 1))
+//             Image(request.doctorImage)
+//                .resizable()
+//                .aspectRatio(contentMode: .fill)
+//                .frame(width: 100, height: 100)
+//                .clipShape(Circle())
+//                .overlay(Circle().stroke(Color.black, lineWidth: 1))
             
-            Text(request.doctorName)
-                .font(.headline)
-                .fontWeight(.bold)
-                .padding(.top)
-                .foregroundColor(.black)
+//            Text(request.doctorName)
+//                .font(.headline)
+//                .fontWeight(.bold)
+//                .padding(.top)
+//                .foregroundColor(.black)
             
-            Text(request.department)
-                .font(.subheadline)
-                .foregroundColor(.black)
-            
-            Text("ID: \(request.doctorId)")
-                .font(.subheadline)
-                .foregroundColor(.black)
-                .padding(.bottom)
+//            Text(request.department)
+//                .font(.subheadline)
+//                .foregroundColor(.black)
+//
+//            Text("ID: \(request.doctorId)")
+//                .font(.subheadline)
+//                .foregroundColor(.black)
+//                .padding(.bottom)
             
             Text("Reason: \(request.reason)")
-                .font(.subheadline)
+                .font(.title2)
                 .foregroundColor(.black)
             
             if let fromDate = request.fromDate, let toDate = request.toDate {
                 Text("From: \(fromDate.formattedDate()) To: \(toDate.formattedDate())")
-                    .font(.subheadline)
+                    .font(.title2)
                     .foregroundColor(.black)
             }
             
             if let requestDate = request.requestDate {
                 Text("Request Date: \(requestDate.formattedDate())")
-                    .font(.subheadline)
+                    .font(.title2)
                     .foregroundColor(.black)
             }
             
             Text("Status: \(request.status)")
-                .font(.subheadline)
+                .font(.title3.bold())
                 .foregroundColor(.black)
         }
-        .frame(width: 197, height: 300)
-        .background(Color.white.opacity(0.7))
+        
+    
+        .frame(width: 220  , height: 220)
+        .background(Color(UIColor(red: 225 / 255, green: 101 / 255, blue: 74 / 255, alpha: 0.1)))
         .cornerRadius(36)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
         .padding(.all, 5)

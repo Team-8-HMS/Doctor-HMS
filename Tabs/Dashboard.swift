@@ -2,13 +2,14 @@ import SwiftUI
 
 // DashboardView
 struct DashboardView: View {
-    var todayAppointments: [FirebaseAppointment] {
-        app.filter { $0.date.isSameDay(as: Date()) }
-    }
-    
-    var pendingAppointments: [FirebaseAppointment] {
-        todayAppointments.filter { $0.status == "Pending" }
-    }
+    @StateObject var appModel = AppViewModel()
+//    var todayAppointments: [FirebaseAppointment] {
+//        app.filter { $0.date.isSameDay(as: Date()) }
+//    }
+//
+//    var pendingAppointments: [FirebaseAppointment] {
+//        todayAppointments.filter { $0.status == "Pending" }
+//    }
 
     var body: some View {
         ScrollView {
@@ -22,34 +23,45 @@ struct DashboardView: View {
                 .padding(.bottom, 20)
 
                 HStack(spacing: 40) {
-                    CardView(title: "Total Patients for today", number: todayAppointments.count, imageName: "person.2.fill", backgroundColor: Color(hex: "#531B93").opacity(0.1))
-                    CardView(title: "Remaining Appointments", number: pendingAppointments.count, imageName: "calendar.badge.clock", backgroundColor: Color(hex: "#531B93").opacity(0.1))
+                    CardView(title: "Total Patients for today", number: appModel.todayApp.count, imageName: "person.2.fill", backgroundColor: Color(red: 247 / 255, green: 237 / 255, blue: 234 / 255))
+                    CardView(title: "Remaining Appointments", number: appModel.pendingApp.count, imageName: "calendar.badge.clock", backgroundColor: Color(red: 247 / 255, green: 237 / 255, blue: 234 / 255))
                 }
+                
                 .padding()
                 .frame(minHeight: 200)
+                .background(Color(UIColor.systemGray6))
+                .cornerRadius(10)
 
                 Text("Today's Patient List")
                     .font(.title)
                     .fontWeight(.bold)
+                    .padding(.leading,20)
                     .padding(.top, 30)
+                    .foregroundColor(Color(red: 44/255, green: 62/255, blue: 80/255)) // Deep navy
+
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 HeaderRow()
                 
                 List {
-                    ForEach(todayAppointments) { appointment in
-                        PatientRow(patient: patientData[appointment.patientId] ?? Patient(id: "", name: "Unknown", dob: Date(), profileImage: "", status: ""))
-                    }
-                }
+                    ForEach(appModel.todayApp) { appointment in
+                                        AppointmentRow(appointment: appointment)
+                                    }
+                                }
                 .listStyle(PlainListStyle())
-                .frame(height: CGFloat(todayAppointments.count) * 80) // Adjust height based on number of appointments
+                .frame(height: CGFloat(appModel.todayApp.count) * 200) // Adjust height based on number of appointments
             }
             .onAppear{
-                fetchAppointments()
+     //           fetchAppointments()
             }
             .padding(.horizontal)
+            .accentColor(Color(UIColor(red: 225 / 255, green: 101 / 255, blue: 74 / 255, alpha: 0.8)))
+
         }
+        
     }
+        
+
         
 }
 
@@ -64,7 +76,7 @@ struct HeaderRow: View {
             Text("Timing")
                 .font(.subheadline)
                 .frame(width: 100, alignment: .leading)
-                .padding(.leading, 350)
+                .padding(.leading, 405)
 //            Text("Status")
 //                .font(.subheadline)
 //                .frame(width: 100, alignment: .leading)
@@ -84,15 +96,32 @@ struct HeaderRow: View {
 
 // Components
 struct GreetingView: View {
+
+    private var greetingMessage: String {
+        let hour = Calendar.current.component(.hour, from: Date())
+        switch hour {
+        case 6..<12:
+            return "Good Morning!"
+        case 12..<18:
+            return "Good Afternoon!"
+        case 18..<22:
+            return "Good Evening!"
+        default:
+            return "Good Night!"
+        }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
-            Text("Good morning!")
+            Text(greetingMessage)
                 .font(.system(size: 40, weight: .bold))
                 .fontWeight(.bold)
+                .foregroundColor(Color(red: 1.0, green: 107/255, blue: 53/255)) // Vibrant orange
+
                 .padding(.top, 0)
-            Text("Here are your important updates for today.")
+            Text("")
                 .font(.system(size: 25))
-                .foregroundColor(.gray)
+                .foregroundColor(Color(red: 107/255, green: 125/255, blue: 141/255))
         }
         .padding(.vertical, 0)
         .padding(.horizontal, 10)
@@ -160,13 +189,17 @@ struct PatientRow: View {
 
     var body: some View {
         NavigationStack {
-            NavigationLink(destination: DoctorNotesView()) {
+            NavigationLink(destination: PatientDetail()) {
                 HStack(spacing: 10) {
-                    Image(patient.profileImage)
-                        .resizable()
-                        .frame(width: 80, height: 80)
-                        .clipShape(Circle())
-                        .padding(.trailing, 10)
+                    AsyncImage(url: URL(string: patient.profileImage)){image in
+                        image
+                            .image?.resizable()
+                            .frame(width: 80, height: 80)
+                            .clipShape(Circle())
+                            .padding(.trailing, 10)
+                        
+                    }
+                        
                     
                     VStack(alignment: .leading, spacing: 5) {
                         Text(patient.name)

@@ -9,6 +9,7 @@ import SwiftUI
 
 // ScheduleView
 struct ScheduleView: View {
+    @StateObject var appModel = AppViewModel()
     @State private var selectedDate = Date()
 
     var body: some View {
@@ -17,7 +18,7 @@ struct ScheduleView: View {
                 .padding(.bottom, 20)
             
             List {
-                ForEach(app.filter { $0.date.isSameDay(as: selectedDate) }) { appointment in
+                ForEach(appModel.app.filter { $0.date.isSameDay(as: selectedDate) }) { appointment in
                     AppointmentRow(appointment: appointment)
                 }
             }
@@ -25,6 +26,7 @@ struct ScheduleView: View {
             .padding(.bottom, 10) // Add bottom padding to the List
         }
         .padding(.horizontal, -10)
+        .accentColor(Color(UIColor(red: 225 / 255, green: 101 / 255, blue: 74 / 255, alpha: 0.8)))
     }
 }
 
@@ -44,14 +46,16 @@ struct CalendarView: View {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM yyyy"
         return dateFormatter.string(from: selectedDate)
+            
     }
+        
     
     var body: some View {
         VStack {
             Text(currentMonth)
                 .font(.system(size: 40))
                 .fontWeight(.bold)
-                .padding(.top, -40)
+                .padding(.top, 0)
             
             HStack {
                 Button(action: {
@@ -71,7 +75,7 @@ struct CalendarView: View {
                     VStack {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
-                                .foregroundColor(selectedDate.isSameDay(as: day) ? Color(UIColor(red: 228 / 255, green: 101 / 255, blue: 74 / 255, alpha: 1)) : Color.gray)
+                                .foregroundColor(selectedDate.isSameDay(as: day) ? Color(UIColor(red: 228 / 255, green: 101 / 255, blue: 74 / 255, alpha: 1)) : Color.gray.opacity(0.6))
                                 .frame(width: 120, height: 100)
                             
                             VStack {
@@ -114,18 +118,24 @@ struct CalendarView: View {
 
 // AppointmentRow
 struct AppointmentRow: View {
+    @StateObject var appModel = AppViewModel()
     var appointment: FirebaseAppointment
 
     var body: some View {
+        NavigationStack{
+            NavigationLink(destination: PatientDetail()){
         HStack {
-            Image("appointment.patient.profileImage")
-                .resizable()
-                .frame(width: 80, height: 80)
-                .clipShape(Circle())
-                .padding(.trailing, 10)
+            AsyncImage(url: URL(string: "appModel.patientData[appointment.patientId]?.profileImage" ?? "")){ image in
+                image
+                    .image?.resizable()
+                    .frame(width: 80, height: 80)
+                    .clipShape(Circle())
+                    .padding(.trailing, 10)
+            }
+                
             
             VStack(alignment: .leading) {
-                Text(appointment.patientId)
+                Text(appModel.patientData[appointment.patientId]?.name ?? "no name found")
                     .font(.headline)
                 Text("\(appointment.date)")
                     .font(.subheadline)
@@ -134,9 +144,16 @@ struct AppointmentRow: View {
             Text(appointment.timeSlot)
                 .font(.subheadline)
             Spacer()
-            Image(systemName: "chevron.right")
+           // Image(systemName: "chevron.right")
         }
         .padding()
+        
+    }
+            .accentColor(.red)
+        
+            
+        }
+        
     }
 
     private func statusColor(for status: String) -> Color {

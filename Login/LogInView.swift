@@ -164,12 +164,12 @@ struct LogInView: View {
 //                    isForgetPasswordTapped = false
 //                }
 //                else{
-                    doctorId = (firebaseResult?.user.uid)!
-                    fetchAppointments()
+                AppViewModel().doctorId = (firebaseResult?.user.uid)!
+//                    fetchAppointments()
                 
-                fetchDoctor(doctorId: doctorId)
+//                fetchDoctor(doctorId: doctorId)
 //                fetchAllPatientData()
-                    print(doctorId)
+//                    print(doctorId)
                     print("Else")
                     loginButtonTapped = true
 //                }

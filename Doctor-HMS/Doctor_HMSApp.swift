@@ -20,6 +20,7 @@ struct YourApp: App {
             else{
                 LogInView()
             }
+//            LogInView()
         }
     }
 }
@@ -30,3 +31,4 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
 }
+

@@ -3,8 +3,8 @@ struct ContentView: View {
     @State private var selectedItem: String? = "Dashboard"
     @State private var showLogoutConfirmation = false
     @State private var isLoggedOut = false
-    let items = ["Dashboard", "Schedule", "Video call", "Requests","Profile"]
-    let icons = ["house", "calendar", "video", "envelope","person"]
+    let items = ["Dashboard", "Schedule", "Requests","Profile"]
+    let icons = ["house", "calendar", "envelope","person"]
     var body: some View {
         NavigationStack {
             VStack {
@@ -59,7 +59,7 @@ struct ContentView: View {
                         secondaryButton: .cancel()
                     )
                 }
-//                
+//
 //                NavigationLink(destination: LoginMain()
 //                                .navigationBarBackButtonHidden(true)
 //                                .navigationBarHidden(true),
@@ -78,8 +78,7 @@ struct ContentView: View {
             DashboardView()
         case "Schedule" : // Case 2
             ScheduleView()
-        case "Video call":
-            videoCallView()
+       
         
         case "Requests":
             RequestView()
@@ -127,38 +126,6 @@ struct TopFrameView: View {
     }
 }
 
-
-// Doctor Profile
-//struct ProfileView: View {
-//    var body: some View {
-//        VStack {
-//            HStack {
-//                ZStack {
-//                    AsyncImage(url: URL(string: currentDoctor.imageURL)){image in
-//                        image
-//                            .image?.resizable()
-//                            .frame(width: 80, height: 80)
-//                            .clipShape(Circle())
-//                            .padding(10)
-//                        
-//                    }
-//                        
-//                }
-//                .frame(width: 80, height: 80)
-//                .padding(.trailing, 10)
-//
-//                VStack(alignment: .leading) {
-//                    Text(currentDoctor.name)
-//                        .fontWeight(.bold)
-//                        .font(.largeTitle)
-//                    Text(currentDoctor.department)
-//                        .font(.title3)
-//                }
-//            }
-//            .padding()
-//        }
-//    }
-//}
 
 
 

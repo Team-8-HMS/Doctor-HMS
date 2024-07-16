@@ -12,9 +12,6 @@ import FirebaseFirestore
 import FirebaseStorage
 import SwiftUI
 
-let db = Firestore.firestore()
-var doctorId : String = ""
-
 struct Patient: Identifiable {
     var id :String
     var name: String
@@ -30,19 +27,12 @@ struct Doctor {
     var department:String
 }
 
-var currentDoctor: Doctor = Doctor(id: "", name: "", imageURL: "", department: "")
-
 struct Appointment: Identifiable {
     var id : String
     var status: String
     var date: Date
     var patient: Patient
 }
-
-// Sample data
-var patientData:[String:Patient] = [:]
-
-
 
 
 struct FirebaseAppointment : Identifiable{
@@ -55,66 +45,99 @@ struct FirebaseAppointment : Identifiable{
     let status:String = "Pending"
 }
 
-//var appointments: [Appointment] = [
-////    Appointment(status: "Done", date: Date(), patient: patientData[0])
-////    Appointment(status: "Done", date: Date(), patient: patientData[1]),
-////    Appointment(status: "Progress", date: Date(), patient: patientData[2]),
-////    Appointment(status: "Pending", date: Date(), patient: patientData[3]),
-////    Appointment(status: "Pending", date: Date(), patient: patientData[3]),
-////    Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-04 15:45:00")!, patient: patientData[3]),
-////    Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-07 17:00:00")!, patient: patientData[4]), Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-05 15:45:00")!, patient: patientData[3]),
-////    Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-05 17:00:00")!, patient: patientData[4])
-//
-//]
 
-var app:[FirebaseAppointment] = []
+let db = Firestore.firestore()
+
+var currentDoctor: Doctor = Doctor(id: "", name: "", imageURL: "", department: "")
+//var app:[FirebaseAppointment] = []
+//var patientData:[String:Patient] = [:]
 
 
-
-func fetchAppointments(){
-    db.collection("Appointements").addSnapshotListener{ querySnapshot ,error in
-        app = []
-        guard let documents = querySnapshot?.documents else{
-            print("No data found")
-            return
-        }
-        for document in documents{
-            do{
-                
-                let data = document.data()
-                print(doctorId)
-                print(data["doctorId"])
-                if doctorId == data["doctorId"] as? String{
-                    let id = data["id"] as? String ?? ""
-                    let doctorId = data["doctorId"] as? String ?? ""
-                    let patientId = data["patientId"] as? String ?? ""
-                    let date = data["date"] as? String ?? ""
-                    let realDate = dateConverter(dateString: date)
-                    let timeSlot = data["timeSlot"] as? String ?? ""
-                    let isPremium = data["isPremium"] as? Bool ?? false
-                    let appointment:FirebaseAppointment = FirebaseAppointment(id: id, doctorId: doctorId, patientId: patientId, date: realDate ?? Date.now, timeSlot: timeSlot, isPremium: isPremium)
-                    app.append(appointment)
-                    print(appointment)
-                }else{
-                    print("doctorId is not matching")
+class AppViewModel: ObservableObject {
+    @AppStorage("doctorId") var doctorId : String = ""
+    @Published var app:[FirebaseAppointment] = []
+    @Published var todayApp: [FirebaseAppointment] = []
+    @Published var pendingApp: [FirebaseAppointment] = []
+    @Published var patientData:[String:Patient] = [:]
+    
+    init() {
+        if !doctorId.isEmpty {
+                    fetchDoctor(doctorId: doctorId)
                 }
-                
+        
+        db.collection("Appointements").addSnapshotListener{ querySnapshot ,error in
+            guard let documents = querySnapshot?.documents else{
+                print("No data found")
+                return
+            }
+            self.app = []
+            self.todayApp = []
+            self.pendingApp = []
+            self.patientData = [:]
+            for document in documents{
+                do{
+                    
+                    let data = document.data()
+//                    print(doctorId)
+//                    print(data["doctorId"])
+                    if currentDoctor.id == data["doctorId"] as? String{
+                        let id = data["id"] as? String ?? ""
+                        let doctorId = data["doctorId"] as? String ?? ""
+                        let patientId = data["patientId"] as? String ?? ""
+                        let date = data["date"] as? String ?? ""
+                        let realDate = dateConverter(dateString: date)!
+                        let timeSlot = data["timeSlot"] as? String ?? ""
+                        let isPremium = data["isPremium"] as? Bool ?? false
+                        let appointment:FirebaseAppointment = FirebaseAppointment(id: id, doctorId: doctorId, patientId: patientId, date: realDate, timeSlot: timeSlot, isPremium: isPremium)
+                        if realDate.isSameDay(as: Date()) {
+                            self.todayApp.append(appointment)
+                        } else {
+                            self.pendingApp.append(appointment)
+                        }
+                        print("patientid --> \(patientId)")
+                        db.document("Patient/\(patientId)").getDocument{documentSnapshot , error in
+                            if let error = error{
+                                print("error")
+                            }
+                            else if let documentSnapshot , documentSnapshot.exists{
+                                if let data = documentSnapshot.data(){
+                                    let name = data["firstname"] as? String ?? ""
+                                    let image = data["image"] as? String ?? ""
+                                    let dob = data["dob"] as? String ?? ""
+                                    let dateDOB = dateConverter(dateString: dob)
+                                    self.patientData[patientId] = Patient(id: patientId, name: name, dob: dateDOB ?? Date.now, profileImage: image, status: "Pending")
+                                    print(self.patientData)
+                                    print("HIHiHiHi")
+                                    
+                                }
+                            }
+                        }
+                        self.app.append(appointment)
+//                        print(appointment)
+                    }else{
+                        print("doctorId is // not matching")
+                    }
+                    
+                }
             }
         }
-        
-    }
-}
-
-func fetchAllPatientData(){
-    for item in app {
-        fetchPatient(patientId: item.patientId)
     }
 }
 
 
+
+
+
+//func fetchAllPatientData(){
+//    for item in app {
+//        fetchPatient(patientId: item.patientId)
+//    }
+//}
+
+// /\(doctorId)
 
 func fetchDoctor(doctorId: String){
-    db.document("Doctors/\(doctorId)").getDocument{documentSnapshot , error in
+    db.collection("Doctors").document("\(doctorId)").getDocument{documentSnapshot , error in
         if let error = error{
             print("error")
         }
@@ -135,24 +158,25 @@ func fetchDoctor(doctorId: String){
 }
 
 
-func fetchPatient(patientId: String){
-    db.document("Patient/\(patientId)").getDocument{documentSnapshot , error in
-        if let error = error{
-            print("error")
-        }
-        else if let documentSnapshot , documentSnapshot.exists{
-            if let data = documentSnapshot.data(){
-                let name = data["name"] as? String ?? ""
-                let image = data["image"] as? String ?? ""
-                let dob = data["dob"] as? String ?? ""
-                let dateDOB = dateConverter(dateString: dob)
-                patientData[patientId] = Patient(id: patientId, name: name, dob: dateDOB ?? Date.now, profileImage: image, status: "Pending")
-                print(patientData)
-                
-            }
-        }
-    }
-}
+//func fetchPatient(patientId: String){
+//    db.document("Patient/\(patientId)").getDocument{documentSnapshot , error in
+//        if let error = error{
+//            print("error")
+//        }
+//        else if let documentSnapshot , documentSnapshot.exists{
+//            if let data = documentSnapshot.data(){
+//                let name = data["name"] as? String ?? ""
+//                let image = data["image"] as? String ?? ""
+//                let dob = data["dob"] as? String ?? ""
+//                let dateDOB = dateConverter(dateString: dob)
+//                patientData[patientId] = Patient(id: patientId, name: name, dob: dateDOB ?? Date.now, profileImage: image, status: "Pending")
+//                print(patientData)
+//                print("HIHiHiHi")
+//
+//            }
+//        }
+//    }
+//}
 
 func dateConverter(dateString : String) -> Date?{
     
@@ -175,4 +199,50 @@ func dateConverter(dateString : String) -> Date?{
 
 
 
+//func fetchAppointments() {
+//    db.collection("Appointements").addSnapshotListener{ querySnapshot ,error in
+//        app = []
+//        guard let documents = querySnapshot?.documents else{
+//            print("No data found")
+//            return
+//        }
+//        for document in documents{
+//            do{
+//
+//                let data = document.data()
+//                print(doctorId)
+//                print(data["doctorId"])
+//                if doctorId == data["doctorId"] as? String{
+//                    let id = data["id"] as? String ?? ""
+//                    let doctorId = data["doctorId"] as? String ?? ""
+//                    let patientId = data["patientId"] as? String ?? ""
+//                    let date = data["date"] as? String ?? ""
+//                    let realDate = dateConverter(dateString: date)
+//                    let timeSlot = data["timeSlot"] as? String ?? ""
+//                    let isPremium = data["isPremium"] as? Bool ?? false
+//                    let appointment:FirebaseAppointment = FirebaseAppointment(id: id, doctorId: doctorId, patientId: patientId, date: realDate ?? Date.now, timeSlot: timeSlot, isPremium: isPremium)
+//                    app.append(appointment)
+////                    print(appointment)
+//                }else{
+//                    print("doctorId is not matching")
+//                }
+//
+//            }
+//        }
+//
+//    }
+//}
 
+
+
+//var appointments: [Appointment] = [
+////    Appointment(status: "Done", date: Date(), patient: patientData[0])
+////    Appointment(status: "Done", date: Date(), patient: patientData[1]),
+////    Appointment(status: "Progress", date: Date(), patient: patientData[2]),
+////    Appointment(status: "Pending", date: Date(), patient: patientData[3]),
+////    Appointment(status: "Pending", date: Date(), patient: patientData[3]),
+////    Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-04 15:45:00")!, patient: patientData[3]),
+////    Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-07 17:00:00")!, patient: patientData[4]), Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-05 15:45:00")!, patient: patientData[3]),
+////    Appointment(status: "Pending", date: dateFormatter.date(from: "2024-07-05 17:00:00")!, patient: patientData[4])
+//
+//]
