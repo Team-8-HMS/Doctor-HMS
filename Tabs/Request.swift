@@ -16,29 +16,25 @@ struct Request: Identifiable {
     var status: String
 }
 
-
-
 struct RequestView: View {
     @State private var fromDate = Date()
     @State private var toDate = Date()
     @State private var message: String = ""
     @State private var selectedSegment = 0
-    @State private var requests : [Request] = []
+    @State private var requests: [Request] = []
     @State private var showingAlert = false
     @State private var alertMessage = ""
     @State private var doctorDetailRequest = currentDoctor
-    
+
     var body: some View {
         VStack {
             Picker("Options", selection: $selectedSegment) {
                 Text("Request Form").tag(0)
                 Text("Requests Sent").tag(1)
             }
-        
             .pickerStyle(SegmentedPickerStyle())
             .frame(height: 60)
             .padding()
-
 
             if selectedSegment == 0 {
                 requestFormView
@@ -46,7 +42,7 @@ struct RequestView: View {
                 requestsSentView
             }
         }
-        .background(Color(red: 242/255, green: 242/255, blue: 247/255))
+        .background(Color(red: 242 / 255, green: 242 / 255, blue: 247 / 255))
         .edgesIgnoringSafeArea(.all)
         .navigationTitle("Request")
         .padding()
@@ -57,13 +53,14 @@ struct RequestView: View {
             fetchRequests()
         }
     }
+
     private var requestFormView: some View {
         VStack(alignment: .leading, spacing: 20) {
             VStack {
                 List {
-                    DatePicker("From", selection: $fromDate, displayedComponents: .date)
+                    DatePicker("From", selection: $fromDate, displayedComponents: [.date, .hourAndMinute])
                         .frame(height: 60)
-                    DatePicker("To", selection: $toDate, displayedComponents: .date)
+                    DatePicker("To", selection: $toDate, displayedComponents: [.date, .hourAndMinute])
                         .frame(height: 60)
                     TextField("Message", text: $message)
                         .frame(height: 150, alignment: .top)
@@ -76,17 +73,16 @@ struct RequestView: View {
                 .background(Color(UIColor(red: 225 / 255, green: 101 / 255, blue: 74 / 255, alpha: 1)))
                 .foregroundColor(.white)
                 .cornerRadius(10)
-                .padding(.top,40)
+                .padding(.top, 40)
             }
             .cornerRadius(10)
-            .listStyle(.plain)
+            .listStyle(PlainListStyle())
             Spacer()
         }
         .padding(40)
         .cornerRadius(10)
     }
 
-    
     private var requestsSentView: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 197), spacing: 40)]) {
@@ -96,13 +92,13 @@ struct RequestView: View {
             }
             .padding()
         }
-        .background(Color(red: 242/255, green: 242/255, blue: 247/255))
+        .background(Color(red: 242 / 255, green: 242 / 255, blue: 247 / 255))
         .cornerRadius(10)
     }
-    
+
     private func addRequest() {
         let currentDate = Date()
-        let newRequest = Request(doctorName: doctorDetailRequest.name , doctorImage: doctorDetailRequest.imageURL, doctorId: doctorDetailRequest.id, department: doctorDetailRequest.department, reason: message, fromDate: fromDate, toDate: toDate, requestDate: currentDate, message: message, status: "Pending")
+        let newRequest = Request(doctorName: doctorDetailRequest.name, doctorImage: doctorDetailRequest.imageURL, doctorId: doctorDetailRequest.id, department: doctorDetailRequest.department, reason: message, fromDate: fromDate, toDate: toDate, requestDate: currentDate, message: message, status: "Pending")
 
         FirestoreService.shared.addRequest(request: newRequest) { error in
             if let error = error {
@@ -117,7 +113,7 @@ struct RequestView: View {
             showingAlert = true
         }
     }
-    
+
     private func fetchRequests() {
         FirestoreService.shared.fetchRequests(forDoctorId: doctorDetailRequest.id) { (fetchedRequests, error) in
             if let error = error {
@@ -128,13 +124,12 @@ struct RequestView: View {
             }
         }
     }
-        
 }
 
 class FirestoreService {
     static let shared = FirestoreService()
     private let db = Firestore.firestore()
-    
+
     func addRequest(request: Request, completion: @escaping (Error?) -> Void) {
         let requestData: [String: Any] = [
             "doctorName": request.doctorName,
@@ -148,12 +143,12 @@ class FirestoreService {
             "message": request.message,
             "status": request.status
         ]
-        
+
         db.collection("requests").addDocument(data: requestData) { error in
             completion(error)
         }
     }
-    
+
     func fetchRequests(forDoctorId doctorId: String, completion: @escaping ([Request]?, Error?) -> Void) {
         db.collection("requests").whereField("doctorId", isEqualTo: doctorId).getDocuments { (snapshot, error) in
             if let error = error {
@@ -185,61 +180,36 @@ class FirestoreService {
 
 struct RequestCardView: View {
     var request: Request
-    
+
     var body: some View {
         VStack {
-//             Image(request.doctorImage)
-//                .resizable()
-//                .aspectRatio(contentMode: .fill)
-//                .frame(width: 100, height: 100)
-//                .clipShape(Circle())
-//                .overlay(Circle().stroke(Color.black, lineWidth: 1))
-            
-//            Text(request.doctorName)
-//                .font(.headline)
-//                .fontWeight(.bold)
-//                .padding(.top)
-//                .foregroundColor(.black)
-            
-//            Text(request.department)
-//                .font(.subheadline)
-//                .foregroundColor(.black)
-//
-//            Text("ID: \(request.doctorId)")
-//                .font(.subheadline)
-//                .foregroundColor(.black)
-//                .padding(.bottom)
-            
             Text("Reason: \(request.reason)")
                 .font(.title2)
                 .foregroundColor(.black)
-            
+
             if let fromDate = request.fromDate, let toDate = request.toDate {
                 Text("From: \(fromDate.formattedDate()) To: \(toDate.formattedDate())")
                     .font(.title2)
                     .foregroundColor(.black)
             }
-            
+
             if let requestDate = request.requestDate {
                 Text("Request Date: \(requestDate.formattedDate())")
                     .font(.title2)
                     .foregroundColor(.black)
             }
-            
+
             Text("Status: \(request.status)")
                 .font(.title3.bold())
                 .foregroundColor(.black)
         }
-        
-    
-        .frame(width: 220  , height: 220)
+        .frame(width: 220, height: 220)
         .background(Color(UIColor(red: 225 / 255, green: 101 / 255, blue: 74 / 255, alpha: 0.1)))
         .cornerRadius(36)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
         .padding(.all, 5)
     }
 }
-
 
 struct RequestView_Previews: PreviewProvider {
     static var previews: some View {

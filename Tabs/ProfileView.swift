@@ -30,25 +30,25 @@ class DoctorProfileFirestoreService: ObservableObject {
     }
 }
 
-    struct DoctorProfile: Identifiable, Codable {
-        var id: String
-        var idNumber: Int
-        var name: String
-        var contactNo: String
-        var email: String
-        var address: String
-        var gender: String
-        var dob: Date
-        var degree: String
-        var department: String
-        var status: Bool
-        var entryTime: Date
-        var exitTime: Date
-        var visitingFees: Int
-        var imageURL: URL?
-        var workingDays: [String]
-        var yearsOfExperience: Int
-    }
+struct DoctorProfile: Identifiable, Codable {
+    var id: String
+    var idNumber: Int
+    var name: String
+    var contactNo: String
+    var email: String
+    var address: String
+    var gender: String
+    var dob: Date
+    var degree: String
+    var department: String
+    var status: Bool
+    var entryTime: Date
+    var exitTime: Date
+    var visitingFees: Int
+    var imageURL: URL?
+    var workingDays: [String]
+    var yearsOfExperience: Int
+}
 
 struct DoctorProfileView: View {
     @StateObject private var firestoreService = DoctorProfileFirestoreService()
@@ -59,9 +59,7 @@ struct DoctorProfileView: View {
             VStack {
                 HStack {
                     Spacer()
-                    Button(action: {
-                        logOut()
-                    }) {
+                    Button(action: logOut) {
                         Text("Log Out")
                             .padding()
                             .background(Color(#colorLiteral(red: 0.878, green: 0.365, blue: 0.29, alpha: 1)))
@@ -86,7 +84,7 @@ struct DoctorProfileView: View {
 
                 Spacer(minLength: 120)
             }
-            NavigationLink(destination: LogInView(), isActive:$isLoggedOut){
+            NavigationLink(destination: LogInView(), isActive: $isLoggedOut) {
                 EmptyView()
             }
             .padding()
@@ -126,7 +124,8 @@ struct ProfileImageView: View {
                             .background(Color.gray.opacity(0.1))
                             .clipShape(Circle())
                             .overlay(
-                                Circle().stroke(Color.white, lineWidth: 2))
+                                Circle().stroke(Color.white, lineWidth: 2)
+                            )
                     case .success(let image):
                         image
                             .resizable()
@@ -134,21 +133,21 @@ struct ProfileImageView: View {
                             .frame(width: 200, height: 200)
                             .clipShape(Circle())
                             .overlay(
-                                Circle().stroke(Color.white, lineWidth: 2))
+                                Circle().stroke(Color.white, lineWidth: 2)
+                            )
                             .shadow(radius: 10)
                             .padding(.top)
-                            .foregroundColor(Color(#colorLiteral(red: 0.878, green: 0.365, blue: 0.29, alpha: 1)))
-                                                case .failure(_):
+                    case .failure:
                         Image(systemName: "person.circle.fill")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 200, height: 200)
                             .clipShape(Circle())
                             .overlay(
-                                Circle().stroke(Color.white, lineWidth: 2))
+                                Circle().stroke(Color.white, lineWidth: 2)
+                            )
                             .padding(.top)
                             .foregroundColor(Color(#colorLiteral(red: 0.878, green: 0.365, blue: 0.29, alpha: 1)))
-                            
                     @unknown default:
                         EmptyView()
                     }
@@ -160,7 +159,8 @@ struct ProfileImageView: View {
                     .frame(width: 200, height: 200)
                     .clipShape(Circle())
                     .overlay(
-                        Circle().stroke(Color.white, lineWidth: 4))
+                        Circle().stroke(Color.white, lineWidth: 4)
+                    )
                     .padding(.top)
                     .foregroundColor(Color(#colorLiteral(red: 0.878, green: 0.365, blue: 0.29, alpha: 1)))
             }
@@ -226,7 +226,8 @@ struct ProfileRow: View {
     }
 }
 
-
-    
-    
-
+struct DoctorProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        DoctorProfileView()
+    }
+}

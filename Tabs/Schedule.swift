@@ -27,6 +27,7 @@ struct ScheduleView: View {
         }
         .padding(.horizontal, -10)
         .accentColor(Color(UIColor(red: 225 / 255, green: 101 / 255, blue: 74 / 255, alpha: 0.8)))
+        .navigationBarTitle("Schedule", displayMode: .inline)
     }
 }
 
@@ -46,9 +47,7 @@ struct CalendarView: View {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM yyyy"
         return dateFormatter.string(from: selectedDate)
-            
     }
-        
     
     var body: some View {
         VStack {
@@ -74,24 +73,21 @@ struct CalendarView: View {
                 ForEach(days, id: \.self) { day in
                     VStack {
                         ZStack {
-                            RoundedRectangle(cornerRadius: 10)
+                            Circle()
                                 .foregroundColor(selectedDate.isSameDay(as: day) ? Color(UIColor(red: 228 / 255, green: 101 / 255, blue: 74 / 255, alpha: 1)) : Color.gray.opacity(0.6))
-                                .frame(width: 120, height: 100)
+                                .frame(width: 80, height: 80)
                             
                             VStack {
                                 Text(day.formattedDay())
-                                    .font(.system(size: 18))
+                                    .font(.system(size: 12))
                                     .foregroundColor(.white)
-                                    .padding(.top, 10)
                                 
                                 Text(day.formattedDate())
-                                    .font(.system(size: 30))
+                                    .font(.system(size: 18))
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
-                                    .padding(.bottom, 10)
                             }
                         }
-                        .cornerRadius(10)
                         .onTapGesture {
                             selectedDate = day
                         }
@@ -123,37 +119,34 @@ struct AppointmentRow: View {
 
     var body: some View {
         NavigationStack{
-            NavigationLink(destination: PatientDetail()){
-        HStack {
-            AsyncImage(url: URL(string: "appModel.patientData[appointment.patientId]?.profileImage" ?? "")){ image in
-                image
-                    .image?.resizable()
-                    .frame(width: 80, height: 80)
-                    .clipShape(Circle())
-                    .padding(.trailing, 10)
+            NavigationLink(destination: PatientDetail()) {
+                HStack {
+                    AsyncImage(url: URL(string: appModel.patientData[appointment.patientId]?.profileImage ?? "")) { image in
+                        image
+                            .resizable()
+                            .frame(width: 80, height: 80)
+                            .clipShape(Circle())
+                            .padding(.trailing, 10)
+                    } placeholder: {
+                        Circle()
+                            .frame(width: 80, height: 80)
+                            .padding(.trailing, 10)
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        Text(appModel.patientData[appointment.patientId]?.name ?? "No name found")
+                            .font(.headline)
+                        Text(appointment.date.formattedDate())
+                            .font(.subheadline)
+                    }
+                    Spacer()
+                    Text(appointment.timeSlot)
+                        .font(.subheadline)
+                }
+                .padding()
             }
-                
-            
-            VStack(alignment: .leading) {
-                Text(appModel.patientData[appointment.patientId]?.name ?? "no name found")
-                    .font(.headline)
-                Text("\(appointment.date)")
-                    .font(.subheadline)
-            }
-            Spacer()
-            Text(appointment.timeSlot)
-                .font(.subheadline)
-            Spacer()
-           // Image(systemName: "chevron.right")
-        }
-        .padding()
-        
-    }
             .accentColor(.red)
-        
-            
         }
-        
     }
 
     private func statusColor(for status: String) -> Color {
@@ -161,7 +154,7 @@ struct AppointmentRow: View {
         case "Pending":
             return Color(red: 218/255, green: 59/255, blue: 19/255)
         case "Done":
-            return Color(red: 101/255, green:200/255, blue: 102/255)
+            return Color(red: 101/255, green: 200/255, blue: 102/255)
         case "Progress":
             return Color(red: 50/255, green: 0/255, blue: 255/255)
         default:
