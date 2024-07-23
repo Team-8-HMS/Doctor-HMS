@@ -1,5 +1,7 @@
 import SwiftUI
 import PencilKit
+import Firebase
+import FirebaseStorage
 
 struct PencilKitView: UIViewControllerRepresentable {
     @Binding var canvasView: PKCanvasView
@@ -24,6 +26,7 @@ struct PencilKitView: UIViewControllerRepresentable {
                 parent.canvasView.drawHierarchy(in: parent.canvasView.bounds, afterScreenUpdates: true)
             }
             parent.onSave(image)
+            saveImageToFirestore(image)
         }
 
         @objc func clearButtonTapped() {
@@ -44,6 +47,36 @@ struct PencilKitView: UIViewControllerRepresentable {
 
         @objc func markerButtonTapped() {
             parent.canvasView.tool = PKInkingTool(.marker, color: .black, width: 10)
+        }
+        
+        func saveImageToFirestore(_ image: UIImage) {
+            guard let imageData = image.jpegData(compressionQuality: 0.8) else { return }
+            let storageRef = Storage.storage().reference().child("prescriptions/\(UUID().uuidString).jpg")
+            
+            let _ = storageRef.putData(imageData, metadata: nil) { metadata, error in
+                guard metadata != nil else {
+                    print("Failed to upload image: \(error?.localizedDescription ?? "Unknown error")")
+                    return
+                }
+                storageRef.downloadURL { (url, error) in
+                    guard let downloadURL = url else {
+                        print("Failed to retrieve download URL: \(error?.localizedDescription ?? "Unknown error")")
+                        return
+                    }
+                    self.saveImageURLToFirestore(downloadURL.absoluteString)
+                }
+            }
+        }
+        
+        func saveImageURLToFirestore(_ url: String) {
+            let db = Firestore.firestore()
+            db.collection("prescriptions").addDocument(data: ["imageURL": url]) { error in
+                if let error = error {
+                    print("Failed to save image URL to Firestore: \(error.localizedDescription)")
+                } else {
+                    print("Image URL saved successfully.")
+                }
+            }
         }
     }
 

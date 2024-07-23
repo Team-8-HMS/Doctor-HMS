@@ -33,7 +33,7 @@ struct RequestView: View {
                 Text("Requests Sent").tag(1)
             }
             .pickerStyle(SegmentedPickerStyle())
-            .frame(height: 60)
+            .frame(height: 100)
             .padding()
 
             if selectedSegment == 0 {

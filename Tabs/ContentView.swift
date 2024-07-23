@@ -89,15 +89,7 @@ struct ContentView: View {
             Text("Unknown selection")
         }
     }
-    
-//    func logout() {
-//        do {
-//            try Auth.auth().signOut()
-//            isLoggedOut = true
-//        } catch let signOutError as NSError {
-//            print("Error signing out: %@", signOutError)
-//        }
-//    }
+
 }
 
 

@@ -1,9 +1,3 @@
-//
-//  Schedule.swift
-//  Doctor-HMS
-//
-//  Created by Rishita kumari on 06/07/24.
-//
 
 import SwiftUI
 
@@ -16,6 +10,9 @@ struct ScheduleView: View {
         VStack {
             CalendarView(selectedDate: $selectedDate)
                 .padding(.bottom, 20)
+        
+            Spacer(minLength: 20)
+            HeaderRow()
             
             List {
                 ForEach(appModel.app.filter { $0.date.isSameDay(as: selectedDate) }) { appointment in
@@ -116,10 +113,11 @@ struct CalendarView: View {
 struct AppointmentRow: View {
     @StateObject var appModel = AppViewModel()
     var appointment: FirebaseAppointment
+    
 
     var body: some View {
         NavigationStack{
-            NavigationLink(destination: PatientDetail()) {
+            NavigationLink(destination: PatientDetail(appointements: appointment)) {
                 HStack {
                     AsyncImage(url: URL(string: appModel.patientData[appointment.patientId]?.profileImage ?? "")) { image in
                         image
@@ -132,12 +130,11 @@ struct AppointmentRow: View {
                             .frame(width: 80, height: 80)
                             .padding(.trailing, 10)
                     }
+                    Spacer()
                     
                     VStack(alignment: .leading) {
                         Text(appModel.patientData[appointment.patientId]?.name ?? "No name found")
                             .font(.headline)
-                        Text(appointment.date.formattedDate())
-                            .font(.subheadline)
                     }
                     Spacer()
                     Text(appointment.timeSlot)
@@ -149,35 +146,5 @@ struct AppointmentRow: View {
         }
     }
 
-    private func statusColor(for status: String) -> Color {
-        switch status {
-        case "Pending":
-            return Color(red: 218/255, green: 59/255, blue: 19/255)
-        case "Done":
-            return Color(red: 101/255, green: 200/255, blue: 102/255)
-        case "Progress":
-            return Color(red: 50/255, green: 0/255, blue: 255/255)
-        default:
-            return .gray // default color if status is unrecognized
-        }
-    }
-
-    private func statusBackgroundColor(for status: String) -> Color {
-        switch status {
-        case "Pending":
-            return Color(red: 250/255, green: 224/255, blue: 229/255)
-        case "Done":
-            return Color(red: 230/255, green: 246/255, blue: 231/255)
-        case "Progress":
-            return Color(red: 230/255, green: 230/255, blue: 247/255)
-        default:
-            return Color.gray.opacity(0.2)
-        }
-    }
 }
 
-//struct Schedule_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ScheduleView()
-//    }
-//}

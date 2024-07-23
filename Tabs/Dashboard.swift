@@ -15,16 +15,16 @@ struct DashboardView: View {
                 }
                 .padding(.bottom, 20)
 
-                HStack(spacing: 40) {
-                    CardView(title: "Total Patients for today", number: appModel.todayApp.count, imageName: "person.2.fill", backgroundColor: Color(red: 247 / 255, green: 237 / 255, blue: 234 / 255))
-                    CardView(title: "--", number: appModel.pendingApp.count, imageName: "calendar.badge.clock", backgroundColor: Color(red: 247 / 255, green: 237 / 255, blue: 234 / 255))
-                }
-                .padding()
-                .background(Color(UIColor.systemGray6))
-                .cornerRadius(10)
+//                HStack(spacing: 20) {
+                    CardView(
+                        title: "Total Appointments Today",
+                        number: appModel.todayApp.count,
+                        imageName: "person.2.fill",
+                        backgroundColor: Color(red: 247 / 255, green: 237 / 255, blue: 234 / 255)
+                    )
 
-                Text("Today's Patient List")
-                    .font(.title)
+                Text("Today's Appointments")
+                    .font(.title2)
                     .fontWeight(.bold)
                     .padding(.leading, 20)
                     .padding(.top, 30)
@@ -34,20 +34,19 @@ struct DashboardView: View {
                 HeaderRow()
                 
                 List {
-                            Section(header: Text("Appointments")) {
-                                ForEach(appModel.todayApp) { appointment in
-                                    AppointmentRow(appointment: appointment)
-                                }
-                            }
+                    Section() {
+                        ForEach(appModel.todayApp) { appointment in
+                            AppointmentRow(appointment: appointment)
                         }
-                        .listStyle(InsetGroupedListStyle())
-                        .frame(height: CGFloat(appModel.todayApp.count) * 150)
-                    } // Adjust height based on number of appointments
-            
+                    }
+                }
+                .listStyle(InsetGroupedListStyle())
+                .frame(height: CGFloat(appModel.todayApp.count) * 300) // Adjust height based on number of appointments
+            }
             .padding(.horizontal)
             .accentColor(Color(UIColor(red: 225 / 255, green: 101 / 255, blue: 74 / 255, alpha: 0.8)))
         }
-        .navigationBarTitle("Dashboard", displayMode: .inline)
+        .navigationBarTitle("Dashboard", displayMode:.inline)
     }
 }
 
@@ -55,21 +54,25 @@ struct DashboardView: View {
 struct HeaderRow: View {
     var body: some View {
         HStack {
-            Text("Name")
+            Text("Patient Profile")
                 .font(.subheadline)
                 .frame(width: 100, alignment: .leading)
                 .padding(.leading, 20)
-            Text("Timing")
+            Spacer()
+            
+            Text("Patient Name")
                 .font(.subheadline)
                 .frame(width: 100, alignment: .leading)
-                .padding(.leading, 50)
+                .padding(.leading, 10)
             Spacer()
-            Text("")
+            Text("Time Slot")
                 .font(.subheadline)
-                .frame(width: 50, alignment: .leading)
-                .padding()
+                .frame(width: 100, alignment: .leading)
+                .padding(.trailing, 35)
+            
+          
         }
-        .padding(.vertical, 15)
+        .padding(.vertical, 10)
         .padding(.horizontal)
         .background(Color(UIColor.systemGray5))
         .cornerRadius(10)
@@ -108,27 +111,6 @@ struct GreetingView: View {
     }
 }
 
-//struct DateView: View {
-//    var body: some View {
-//        HStack {
-//            Image(systemName: "calendar")
-//                .resizable()
-//                .frame(width: 24, height: 24)
-//                .padding(.trailing, 5)
-//            VStack(alignment: .leading) {
-//                Text(Date().formattedDate())
-//                    .font(.title3)
-//                Text(Date().formattedMonthAndYear())
-//                    .font(.subheadline)
-//            }
-//        }
-//        .padding()
-//        .background(Color.white)
-//        .cornerRadius(10)
-//        .shadow(radius: 5)
-//        .padding(.trailing, 20)
-//    }
-//}
 
 struct CardView: View {
     var title: String
@@ -146,70 +128,28 @@ struct CardView: View {
                     .padding(10)
                     .background(backgroundColor)
                     .cornerRadius(10)
-                    .padding(.trailing, 30)
+                    .padding(.trailing, 20)
                 VStack(alignment: .leading) {
                     Text(title)
                         .font(.headline)
+                        .foregroundColor(.primary)
                     Text("\(number)")
                         .font(.largeTitle)
                         .fontWeight(.bold)
+                        .foregroundColor(.primary)
                 }
+                Spacer()
             }
             .padding()
         }
         .frame(maxWidth: .infinity, minHeight: 170)
         .background(Color.white)
-        .cornerRadius(10)
-        .shadow(radius: 3)
+        .cornerRadius(15)
+        .shadow(radius: 5)
     }
 }
 
-// Patient row
-struct PatientRow: View {
-    var patient: Patient
-    @State private var isSelected = false
-    
-    var body: some View {
-        NavigationStack{ NavigationLink(destination: PatientDetail()) {
-            HStack(spacing: 10) {
-                AsyncImage(url: URL(string: patient.profileImage)) { image in
-                    image
-                        .resizable()
-                        .frame(width: 80, height: 80)
-                        .clipShape(Circle())
-                        .padding(.trailing, 10)
-                } placeholder: {
-                    Circle()
-                        .frame(width: 80, height: 80)
-                        .padding(.trailing, 10)
-                }
-                
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(patient.name)
-                        .font(.headline)
-                        .lineLimit(1)
-                    Text("\(patient.dob)")
-                        .font(.subheadline)
-                        .lineLimit(2)
-                }
-                .padding(.leading, 10)
-                
-                Spacer()
-                
-                Text(patient.status)
-                    .fontWeight(.bold)
-                    .multilineTextAlignment(.center)
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 50)
-                    .cornerRadius(8)
-                    .frame(width: 200, alignment: .center)
-                
-                Spacer()
-            }
-        }
-        }
-    }
-}
+
 #Preview {
     DashboardView()
 }
